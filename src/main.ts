@@ -6,7 +6,9 @@ async function bootstrap() {
     // Dev
     // const app = await NestFactory.create(AppModule, { cors: { origin: 'http://localhost:3001' } });
     // Prod
-    const app = await NestFactory.create(AppModule, { cors: { origin: 'https://cliente-agricola.vercel.app/' } });
+    const app = await NestFactory.create(AppModule, { cors: { origin: 'https://agricola-cliente.vercel.app/' } });
+
+    app.enableCors({ origin: 'https://agricola-cliente.vercel.app/' });
 
     app.useGlobalPipes(
         new ValidationPipe({
