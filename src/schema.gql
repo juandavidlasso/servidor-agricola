@@ -1,0 +1,695 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Usuarios {
+  id_usuario: Int!
+  nombre: String!
+  apellido: String!
+  email: String!
+  password: String!
+  rol: Int!
+  codigo: String
+}
+
+type AuthResponse {
+  token: String!
+  user: Usuarios!
+}
+
+type TratamientoPlagas {
+  id_trapl: Int!
+  producto: String!
+  unidad: String!
+  cantidad: Float!
+  tiempo: String!
+  listAplicacionesPlagas: [AplicacionPlagas!]!
+}
+
+type AplicacionPlagas {
+  id_apla: Int!
+  fecha: String!
+  corte_id: Int!
+  tablon_id: Int!
+  trapl_id: Int!
+  tablon: Tablon!
+  tratamientoPlagaPadre: TratamientoPlagas!
+}
+
+type Tablon {
+  id_tablon: Int!
+  numero: Int!
+  area: Float!
+  estado: Boolean!
+  corte_id: Int!
+  listAplicacionesPlagas: [AplicacionPlagas!]!
+}
+
+type Labores {
+  id_labor: Int!
+  fecha: String!
+  actividad: String!
+  equipo: String
+  estado: String
+  pases: Float
+  aplico: String
+  costo: Float
+  nota: String
+}
+
+type AplicacionLabores {
+  id_aplicacion_labores: Int!
+  corte_id: Int!
+  labor_id: Int!
+  labor: Labores!
+  corte: Corte!
+}
+
+type TratamientoHerbicida {
+  id_trahe: Int!
+  producto: String!
+  dosis: Float!
+  presentacion: String!
+  valor: Float
+  aplico: String
+  nota: String
+  aphe_id: Int!
+  aplicacionHPadre: AplicacionHerbicida!
+}
+
+type AplicacionHerbicida {
+  id_aphe: Int!
+  fecha: String!
+  tipo: String!
+  listTratamientoHerbicida: [TratamientoHerbicida!]!
+  listAplicacionesHerbicidas: [AplicacionesHerbicida!]!
+}
+
+type AplicacionesHerbicida {
+  id_aplicaciones_herbicidas: Int!
+  corte_id: Int!
+  aphe_id: Int!
+  aplicacionHerbicida: AplicacionHerbicida!
+  corte: Corte!
+}
+
+type TratamientoFertilizante {
+  id_trafe: Int!
+  producto: String!
+  dosis: Float!
+  presentacion: String!
+  valor: Float
+  aplico: String
+  nota: String
+  apfe_id: Int!
+  aplicacionFPadre: AplicacionFertilizante!
+}
+
+type AplicacionFertilizante {
+  id_apfe: Int!
+  fecha: String!
+  tipo: String!
+  listTratamientoFertilizante: [TratamientoFertilizante!]!
+  listAplicacionesFertilizantes: [AplicacionesFertilizante!]!
+}
+
+type AplicacionesFertilizante {
+  id_aplicaciones_fertilizantes: Int!
+  corte_id: Int!
+  apfe_id: Int!
+  aplicacionFertilizante: AplicacionFertilizante!
+  corte: Corte!
+}
+
+type Cosecha {
+  id_cosecha: Int!
+  peso: Float!
+  rendimiento: Float
+  numeroVagones: Int
+  numeroMulas: Int
+  corte_id: Int!
+  cortePadre: Corte!
+}
+
+type Corte {
+  id_corte: Int!
+  numero: Int!
+  fecha_siembra: String!
+  fecha_inicio: String!
+  fecha_corte: String
+  activo: Boolean
+  estado: Boolean!
+  area: Float
+  suerte_id: Int!
+  suertePadre: Suerte!
+  listTablones: [Tablon!]!
+  listCosechas: Cosecha!
+}
+
+type Suerte {
+  id_suerte: Int!
+  nombre: String!
+  area: Float
+  variedad: String!
+  zona: String!
+  renovada: String!
+  createdAt: String
+  updatedAt: String
+  listcortes: [Corte!]!
+}
+
+type Lluvia {
+  id_lluvia: Int!
+  fecha: String!
+  cantidad: Int!
+  listAplicacionesLluvias: [AplicacionLluvia!]!
+}
+
+type AplicacionLluvia {
+  id_aplicacion_lluvia: Int!
+  pluviometro_id: Int!
+  lluvia_id: Int!
+  pluviometroPadre: Pluviometro!
+  lluviaPadre: Lluvia!
+  fecha: String
+  cantidad: Int
+}
+
+type Pluviometro {
+  id_pluviometro: Int!
+  nombre: Int!
+  suertesAsociadas: String
+  listAplicacionesLluvias: [AplicacionLluvia!]!
+}
+
+type AplicacionRiego {
+  id_apriego: Int!
+  riego_id: Int!
+  tablon_id: Int!
+  num_tablon: Int!
+  riegoPadre: Riego!
+}
+
+type Riego {
+  id_riego: Int!
+  fecha: String!
+  num_riego: Int!
+  corte_id: Int!
+  listAplicacionesRiegos: [AplicacionRiego!]!
+}
+
+type Maquinaria {
+  idMaquinaria: Int!
+  marca: String!
+  serie: String!
+  modelo: Int!
+  potencia: Int!
+  color: String!
+}
+
+type Insumo {
+  idInsumo: Int!
+  nombre: String!
+  referencia: String!
+  marca: String!
+  cantidad: String!
+}
+
+type Mantenimiento {
+  idMantenimiento: Int!
+  detalle: String
+  horaCambio: String!
+  proximoCambio: Int!
+  tipoCambio: Boolean!
+  cantidad: Int!
+  insumoId: Int!
+  ApMantId: Int!
+}
+
+type AplicacionMantenimiento {
+  idApMant: Int!
+  fecha: String!
+  nombre: String!
+  maquinariaId: Int!
+  listMantenimientos: [Mantenimiento!]!
+}
+
+type Query {
+  obtenerUsuarios: [Usuarios!]!
+  obtenerUsuario(id_usuario: Int!): Usuarios!
+  obtenerSuertesRenovadas: [Suerte!]!
+  obtenerSuerte(id_suerte: Int!): Suerte!
+  obtenerAreaSuerte(id_suerte: Int!): Float!
+  obtenerSuertesRenovadasYCortes: [Suerte!]!
+  obtenerSuertesRenovadasCortesTablones: [Suerte!]!
+  consultarProntuario(prontuarioInput: ProntuarioInput!): [Cosecha!]!
+  obtenerDatosActuales(nombres: String!): [Suerte!]!
+  obtenerCortesRenovados(nombre: String!): [Corte!]!
+  obtenerCortesPorSuerte(id_suerte: Int!): Int!
+  obtenerCorte(id_corte: Int!): Corte!
+  obtenerCorteActual(id_suerte: Int!): Corte!
+  obtenerTablonesPorCorte(id_corte: Int!): [Tablon!]!
+  countTablonesPorSuerte(id_suerte: Int!): Float!
+  obtenerTablonesYAplicacionesPlagas(id_corte: Int!): [Tablon!]!
+  obtenerTotalHectareasSuertes: Tablon!
+  obtenerLabores: [Labores!]!
+  obtenerAplicacionesHerbicidas: [AplicacionHerbicida!]!
+  obtenerAplicacionesLabores(corte_id: Int!): [AplicacionLabores!]!
+  obtenerAplicacionesHerbicidasCorte(corte_id: Int!): [AplicacionesHerbicida!]!
+  obtenerAplicacionesFertilizantes: [AplicacionFertilizante!]!
+  obtenerAplicacionesFertilizantesCorte(corte_id: Int!): [AplicacionesFertilizante!]!
+  obtenerPluviometrosYLluvias: [Pluviometro!]!
+  obtenerLluvias: [Lluvia!]!
+  obtenerLluviasPorPluviometro(filterLluviaInput: FilterLluviaInput!): [Lluvia!]!
+  obtenerLluviasMesActual: [Pluviometro!]!
+  obtenerLluviasMesYear(filterLluviaMesYearInput: FilterLluviaMesYearInput!): [Pluviometro!]!
+  obtenerLluviasYear(filterLluviaMesYearInput: FilterLluviaMesYearInput!): [Pluviometro!]!
+  obtenerPromedioLluvias(year: Int!): [Lluvia!]!
+  obtenerTratamientoPlagas: [TratamientoPlagas!]!
+  obtenerRiegosCorte(corte_id: Int!): [Riego!]!
+  obtenerRiegosMayor(corte_id: Int!): Float!
+  obtenerCosechaCorte(id_corte: Int!): Cosecha!
+  obtenerResumenLluviasYear(year: Int!): [AplicacionLluvia!]!
+  obtenerResumenPluviometroYear(year: Int!): [AplicacionLluvia!]!
+  obtenerMaquinarias: [Maquinaria!]!
+  obtenerInsumos: [Insumo!]!
+  obtenerAplicacionesMantenimiento(maquinariaId: Int!): [AplicacionMantenimiento!]!
+}
+
+input ProntuarioInput {
+  nombre: String
+  fecha_inicio: String!
+  fecha_fin: String!
+}
+
+input FilterLluviaInput {
+  id_pluviometro: Int!
+  inicial: Int
+  final: Int
+  year: Int!
+}
+
+input FilterLluviaMesYearInput {
+  month: Int!
+  year: Int!
+}
+
+type Mutation {
+  crearUsuario(createUsuarioInput: CreateUsuarioInput!): Usuarios!
+  actualizarUsuario(updateUsuarioInput: UpdateUsuarioInput!): Usuarios!
+  autenticarUsuario(authInput: AuthInput!): AuthResponse!
+  agregarSuerte(createSuerteInput: CreateSuerteInput!): Suerte!
+  agregarSuerteRenovada(createSuerteInput: CreateSuerteInput!): Suerte!
+  actualizarSuerte(updateSuerteInput: UpdateSuerteInput!): Suerte!
+  eliminarSuerte(id_suerte: Int!): Boolean!
+  agregarCorte(createCorteInput: CreateCorteInput!): Corte!
+  actualizarCorte(updateCorteInput: UpdateCorteInput!): Corte!
+  agregarTablon(createTabloneInput: [CreateTabloneInput!]!): [Float!]!
+  actualizarTablon(updateTabloneInput: UpdateTablonInput!): Tablon!
+  eliminarTablon(id_tablon: Int!): Boolean!
+  agregarLabor(createLaboresInput: CreateLaboresInput!): Labores!
+  actualizarLabor(updateLaboresInput: UpdateLaboresInput!): Labores!
+  eliminarLabor(id_labor: Int!): Boolean!
+  agregarAplicacionHerbicida(createAplicacionHerbicidaInput: CreateAplicacionHerbicidaInput!): AplicacionHerbicida!
+  actualizarAplicacionHerbicida(updateAplicacionHerbicidaInput: UpdateAplicacionHerbicidaInput!): AplicacionHerbicida!
+  eliminarAplicacionHerbicida(id_aphe: Float!): Boolean!
+  agregarTratamientoHerbicida(createTratamientoHerbicidaInput: CreateTratamientoHerbicidaInput!): TratamientoHerbicida!
+  actualizarTratamientoHerbicida(updateTratamientoHerbicidaInput: UpdateTratamientoHerbicidaInput!): TratamientoHerbicida!
+  eliminarTratamientoHerbicida(id_trahe: Int!): Boolean!
+  agregarAplicacionLabores(createAplicacionLaboresInput: [CreateAplicacionLaboresInput!]!): [Float!]!
+  eliminarAplicacionLabores(id_aplicacion_labores: Int!): Boolean!
+  agregarAplicacionesHerbicidas(createAplicacionesHerbicidaInput: [CreateAplicacionesHerbicidaInput!]!): [Float!]!
+  eliminarAplicacionesHerbicidasService(id_aplicaciones_herbicidas: Int!): Boolean!
+  agregarAplicacionFertilizante(createAplicacionFertilizanteInput: CreateAplicacionFertilizanteInput!): AplicacionFertilizante!
+  actualizarAplicacionFertilizante(updateAplicacionFertilizanteInput: UpdateAplicacionFertilizanteInput!): AplicacionFertilizante!
+  eliminarAplicacionFertilizante(id_apfe: Int!): Boolean!
+  agregarTratamientoFertilizante(createTratamientoFertilizanteInput: CreateTratamientoFertilizanteInput!): TratamientoFertilizante!
+  actualizarTratamientoFertilizante(updateTratamientoFertilizanteInput: UpdateTratamientoFertilizanteInput!): TratamientoFertilizante!
+  eliminarTratamientoFertilizante(id_trafe: Int!): Boolean!
+  agregarAplicacionesFertilizantes(createAplicacionesFertilizanteInput: [CreateAplicacionesFertilizanteInput!]!): [Float!]!
+  eliminarAplicacionesFertilizantes(id_aplicaciones_fertilizantes: Int!): Boolean!
+  agregarPluviometro(createPluviometroInput: CreatePluviometroInput!): Pluviometro!
+  agregarLluvia(createLluviaInput: CreateLluviaInput!): Lluvia!
+  actualizarLluvia(updateLluviaInput: UpdateLluviaInput!): Lluvia!
+  eliminarLluvia(id_lluvia: Int!): Boolean!
+  agregarTratamientoPlagas(createTratamientoPlagasInput: CreateTratamientoPlagasInput!): TratamientoPlagas!
+  actualizarTratamientoPlagas(updateTratamientoPlagasInput: UpdateTratamientoPlagasInput!): TratamientoPlagas!
+  eliminarTratamientoPlagas(id_trapl: Int!): Boolean!
+  agregarAplicacionPlagas(createAplicacionPlagasInput: CreateAplicacionPlagasInput!): AplicacionPlagas!
+  actualizarAplicacionPlagas(updateAplicacionPlagasInput: UpdateAplicacionPlagasInput!): AplicacionPlagas!
+  eliminarAplicacionPlagas(id_apla: Int!): Boolean!
+  agregarRiego(createRiegoInput: CreateRiegoInput!): Riego!
+  actualizarRiego(updateRiegoInput: UpdateRiegoInput!): Riego!
+  eliminarRiego(id_riego: Int!): Boolean!
+  agregarAplicacionRiego(createAplicacionRiegoInput: [CreateAplicacionRiegoInput!]!): [Float!]!
+  eliminarAplicacionRiego(ids: [Int!]!): [Float!]!
+  agregarCosecha(createCosechaInput: CreateCosechaInput!): Cosecha!
+  actualizarCosecha(updateCosechaInput: UpdateCosechaInput!): Cosecha!
+  agregarAplicacionLluvia(createAplicacionLluviaInput: [CreateAplicacionLluviaInput!]!): [Float!]!
+  eliminarAplicacionLluvia(id_aplicacion_lluvia: Int!): Boolean!
+  agregarMaquinaria(createMaquinariaInput: CreateMaquinariaInput!): Maquinaria!
+  actualizarMaquinaria(updateMaquinariaInput: UpdateMaquinariaInput!): Maquinaria!
+  agregarInsumo(createInsumoInput: CreateInsumoInput!): Insumo!
+  actualizarInsumo(updateInsumoInput: UpdateInsumoInput!): Insumo!
+  eliminarInsumo(idInsumo: Int!): Boolean!
+  agregarAplicacionMantenimiento(createAplicacionMantenimientoInput: CreateAplicacionMantenimientoInput!): AplicacionMantenimiento!
+  actualizarAplicacionMantenimiento(updateAplicacionMantenimientoInput: UpdateAplicacionMantenimientoInput!): AplicacionMantenimiento!
+  eliminarAplicacionMantenimiento(idApMant: Int!): Boolean!
+  agregarMantenimiento(createMantenimientoInput: [CreateMantenimientoInput!]!): [Float!]!
+  actualizarMantenimiento(updateMantenimientoInput: UpdateMantenimientoInput!): Mantenimiento!
+  eliminarMantenimiento(idMantenimiento: Int!): Boolean!
+}
+
+input CreateUsuarioInput {
+  nombre: String!
+  apellido: String!
+  email: String!
+  password: String!
+  rol: Int = 2
+  codigo: String
+}
+
+input UpdateUsuarioInput {
+  nombre: String
+  apellido: String
+  email: String
+  password: String
+  rol: Int = 2
+  codigo: String
+  id_usuario: Int!
+}
+
+input AuthInput {
+  email: String!
+  password: String!
+}
+
+input CreateSuerteInput {
+  nombre: String!
+  area: Float
+  variedad: String!
+  zona: String!
+  renovada: String!
+}
+
+input UpdateSuerteInput {
+  nombre: String
+  area: Float
+  variedad: String
+  zona: String
+  renovada: String
+  id_suerte: Int!
+}
+
+input CreateCorteInput {
+  numero: Int!
+  fecha_siembra: String!
+  fecha_inicio: String!
+  fecha_corte: String
+  activo: Boolean
+  estado: Boolean!
+  area: Float
+  suerte_id: Int!
+}
+
+input UpdateCorteInput {
+  numero: Int
+  fecha_siembra: String
+  fecha_inicio: String
+  fecha_corte: String
+  activo: Boolean
+  estado: Boolean
+  area: Float
+  suerte_id: Int
+  id_corte: Int!
+}
+
+input CreateTabloneInput {
+  numero: Int!
+  area: Float!
+  estado: Boolean!
+  corte_id: Int!
+}
+
+input UpdateTablonInput {
+  numero: Int
+  area: Float
+  estado: Boolean
+  corte_id: Int
+  id_tablon: Int!
+}
+
+input CreateLaboresInput {
+  fecha: String!
+  actividad: String!
+  equipo: String
+  estado: String
+  pases: Float
+  aplico: String
+  costo: Float
+  nota: String
+}
+
+input UpdateLaboresInput {
+  fecha: String
+  actividad: String
+  equipo: String
+  estado: String
+  pases: Float
+  aplico: String
+  costo: Float
+  nota: String
+  id_labor: Int!
+}
+
+input CreateAplicacionHerbicidaInput {
+  fecha: String!
+  tipo: String!
+}
+
+input UpdateAplicacionHerbicidaInput {
+  fecha: String
+  tipo: String
+  id_aphe: Int!
+}
+
+input CreateTratamientoHerbicidaInput {
+  producto: String!
+  dosis: Float!
+  presentacion: String!
+  valor: Float
+  aplico: String
+  nota: String
+  aphe_id: Int!
+}
+
+input UpdateTratamientoHerbicidaInput {
+  producto: String
+  dosis: Float
+  presentacion: String
+  valor: Float
+  aplico: String
+  nota: String
+  aphe_id: Int
+  id_trahe: Int!
+}
+
+input CreateAplicacionLaboresInput {
+  corte_id: Int!
+  labor_id: Int!
+}
+
+input CreateAplicacionesHerbicidaInput {
+  corte_id: Int!
+  aphe_id: Int!
+}
+
+input CreateAplicacionFertilizanteInput {
+  fecha: String!
+  tipo: String!
+}
+
+input UpdateAplicacionFertilizanteInput {
+  fecha: String
+  tipo: String
+  id_apfe: Int!
+}
+
+input CreateTratamientoFertilizanteInput {
+  producto: String!
+  dosis: Float!
+  presentacion: String!
+  valor: Float
+  aplico: String
+  nota: String
+  apfe_id: Int!
+}
+
+input UpdateTratamientoFertilizanteInput {
+  producto: String
+  dosis: Float
+  presentacion: String
+  valor: Float
+  aplico: String
+  nota: String
+  apfe_id: Int
+  id_trafe: Int!
+}
+
+input CreateAplicacionesFertilizanteInput {
+  corte_id: Int!
+  apfe_id: Int!
+}
+
+input CreatePluviometroInput {
+  nombre: Int!
+  suertesAsociadas: String
+}
+
+input CreateLluviaInput {
+  fecha: String!
+  cantidad: Int!
+}
+
+input UpdateLluviaInput {
+  fecha: String
+  cantidad: Int
+  id_lluvia: Int!
+}
+
+input CreateTratamientoPlagasInput {
+  producto: String!
+  unidad: String!
+  cantidad: Float!
+  tiempo: String!
+}
+
+input UpdateTratamientoPlagasInput {
+  producto: String
+  unidad: String
+  cantidad: Float
+  tiempo: String
+  id_trapl: Int!
+}
+
+input CreateAplicacionPlagasInput {
+  fecha: String!
+  corte_id: Int!
+  tablon_id: Int!
+  trapl_id: Int!
+}
+
+input UpdateAplicacionPlagasInput {
+  fecha: String
+  corte_id: Int
+  tablon_id: Int
+  trapl_id: Int
+  id_apla: Int!
+}
+
+input CreateRiegoInput {
+  fecha: String
+  num_riego: Int
+  corte_id: Int
+}
+
+input UpdateRiegoInput {
+  fecha: String
+  num_riego: Int
+  corte_id: Int
+  id_riego: Int!
+}
+
+input CreateAplicacionRiegoInput {
+  riego_id: Int!
+  tablon_id: Int!
+  num_tablon: Int!
+}
+
+input CreateCosechaInput {
+  peso: Float!
+  rendimiento: Float
+  numeroVagones: Int
+  numeroMulas: Int
+  corte_id: Int!
+}
+
+input UpdateCosechaInput {
+  peso: Float
+  rendimiento: Float
+  numeroVagones: Int
+  numeroMulas: Int
+  corte_id: Int
+  id_cosecha: Int!
+}
+
+input CreateAplicacionLluviaInput {
+  pluviometro_id: Int!
+  lluvia_id: Int!
+}
+
+input CreateMaquinariaInput {
+  marca: String!
+  serie: String!
+  modelo: Int!
+  potencia: Int!
+  color: String!
+}
+
+input UpdateMaquinariaInput {
+  marca: String
+  serie: String
+  modelo: Int
+  potencia: Int
+  color: String
+  idMaquinaria: Int!
+}
+
+input CreateInsumoInput {
+  nombre: String!
+  referencia: String!
+  marca: String!
+  cantidad: String!
+}
+
+input UpdateInsumoInput {
+  nombre: String
+  referencia: String
+  marca: String
+  cantidad: String
+  idInsumo: Int!
+}
+
+input CreateAplicacionMantenimientoInput {
+  fecha: String!
+  nombre: String!
+  maquinariaId: Int!
+}
+
+input UpdateAplicacionMantenimientoInput {
+  fecha: String
+  nombre: String
+  maquinariaId: Int
+  idApMant: Int!
+}
+
+input CreateMantenimientoInput {
+  detalle: String!
+  horaCambio: String!
+  proximoCambio: Int!
+  tipoCambio: Boolean!
+  cantidad: Int!
+  insumoId: Int!
+  ApMantId: Int!
+}
+
+input UpdateMantenimientoInput {
+  detalle: String
+  horaCambio: String
+  proximoCambio: Int
+  tipoCambio: Boolean
+  cantidad: Int
+  insumoId: Int
+  ApMantId: Int
+  idMantenimiento: Int!
+}
