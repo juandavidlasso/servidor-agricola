@@ -55,6 +55,7 @@ import { AplicacionMantenimiento } from './modules/aplicacion-mantenimientos/ent
 import { AplicacionMantenimientosModule } from './modules/aplicacion-mantenimientos/aplicacion-mantenimientos.module';
 import { Mantenimiento } from './modules/mantenimientos/entities/mantenimiento.entity';
 import { MantenimientosModule } from './modules/mantenimientos/mantenimientos.module';
+import { AppController } from './app.controller';
 config();
 
 @Module({
@@ -72,6 +73,7 @@ config();
         SequelizeModule.forRoot({
             dialect: 'mysql',
             host: process.env.DB_HOST,
+            port: +process.env.DB_PORT,
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_NAME,
@@ -158,7 +160,7 @@ config();
 
         MantenimientosModule
     ],
-    controllers: [],
+    controllers: [AppController],
     providers: []
 })
 export class AppModule {}
