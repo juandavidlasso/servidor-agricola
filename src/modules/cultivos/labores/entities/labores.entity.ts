@@ -7,7 +7,7 @@ import { AplicacionLabores } from '../../aplicacion-labores/entities/aplicacion-
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Labores'
+    tableName: 'labores'
 })
 export class Labores extends Model<Labores> {
     @Field(() => Int, { nullable: false })

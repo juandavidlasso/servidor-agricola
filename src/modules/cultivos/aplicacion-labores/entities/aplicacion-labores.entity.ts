@@ -8,7 +8,7 @@ import { Corte } from '../../cortes/entities/corte.entity';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Aplicacion_Labores'
+    tableName: 'aplicacion_labores'
 })
 export class AplicacionLabores extends Model<AplicacionLabores> {
     @Field(() => Int, { nullable: false })

@@ -8,7 +8,7 @@ import { AplicacionRiego } from '../../aplicacion-riegos/entities/aplicacion-rie
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Riegos'
+    tableName: 'riegos'
 })
 export class Riego extends Model<Riego> {
     @Field(() => Int, { nullable: false })

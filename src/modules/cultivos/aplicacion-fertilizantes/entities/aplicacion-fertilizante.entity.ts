@@ -8,7 +8,7 @@ import { AplicacionesFertilizante } from '../../aplicaciones-fertilizantes/entit
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Aplicacion_fertilizantes'
+    tableName: 'aplicacion_fertilizantes'
 })
 export class AplicacionFertilizante extends Model<AplicacionFertilizante> {
     @Field(() => Int, { nullable: false })

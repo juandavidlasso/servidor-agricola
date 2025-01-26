@@ -7,7 +7,7 @@ import { AplicacionLluvia } from 'src/modules/cultivos/aplicacion_lluvias/entiti
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Pluviometros'
+    tableName: 'pluviometros'
 })
 export class Pluviometro extends Model<Pluviometro> {
     @Field(() => Int, { nullable: false })

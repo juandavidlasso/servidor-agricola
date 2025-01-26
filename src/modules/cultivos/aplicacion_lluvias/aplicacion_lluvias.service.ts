@@ -48,7 +48,7 @@ export class AplicacionLluviasService {
     async obtenerResumenLluviasYearService(year: number): Promise<AplicacionLluvia[]> {
         try {
             return await this.aplicacionLluviaRepository.sequelize.query(
-                `SELECT pluviometro_id, MONTH(fecha) AS fecha, SUM(cantidad) AS cantidad FROM Aplicacion_lluvias INNER JOIN Lluvias ON Aplicacion_lluvias.lluvia_id = Lluvias.id_lluvia WHERE YEAR(fecha) = :fecano GROUP BY pluviometro_id, YEAR(fecha), MONTH(fecha)`,
+                `SELECT pluviometro_id, MONTH(fecha) AS fecha, SUM(cantidad) AS cantidad FROM aplicacion_lluvias INNER JOIN lluvias ON aplicacion_lluvias.lluvia_id = lluvias.id_lluvia WHERE YEAR(fecha) = :fecano GROUP BY pluviometro_id, YEAR(fecha), MONTH(fecha)`,
                 {
                     replacements: {
                         fecano: year

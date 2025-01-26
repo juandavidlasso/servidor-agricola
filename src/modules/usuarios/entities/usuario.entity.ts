@@ -4,7 +4,7 @@ import { Table, Column, Model, DataType } from 'sequelize-typescript';
 @ObjectType()
 @Table({
     timestamps: false,
-    tableName: 'Usuarios'
+    tableName: 'usuarios'
 })
 export class Usuarios extends Model<Usuarios> {
     @Column({ allowNull: false, primaryKey: true, autoIncrement: true, type: DataType.INTEGER })
@@ -30,8 +30,4 @@ export class Usuarios extends Model<Usuarios> {
     @Column({ allowNull: false, type: DataType.INTEGER })
     @Field(() => Int, { nullable: false })
     rol: number;
-
-    @Column({ allowNull: true, type: DataType.STRING })
-    @Field(() => String, { nullable: true })
-    codigo?: string;
 }

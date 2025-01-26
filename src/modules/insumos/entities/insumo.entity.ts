@@ -6,7 +6,7 @@ import { Column, DataType, Model, Table } from 'sequelize-typescript';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Insumos'
+    tableName: 'insumos'
 })
 export class Insumo extends Model<Insumo> {
     @Field(() => Int, { nullable: false })

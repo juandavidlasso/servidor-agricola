@@ -8,7 +8,7 @@ import { Tablon } from '../../tablones/entities/tablon.entity';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Aplicacion_riegos'
+    tableName: 'aplicacion_riegos'
 })
 export class AplicacionRiego extends Model<AplicacionRiego> {
     @Field(() => Int, { nullable: false })

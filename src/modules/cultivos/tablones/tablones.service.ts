@@ -7,7 +7,6 @@ import { Corte } from '../cortes/entities/corte.entity';
 import { Suerte } from '../suertes/entities/suerte.entity';
 import { AplicacionPlagas } from '../aplicacion-plagas/entities/aplicacion-plagas.entity';
 import { TratamientoPlagas } from '../tratamiento-plagas/entities/tratamiento-plagas.entity';
-import { QueryTypes } from 'sequelize';
 
 @Injectable()
 export class TablonesService {
@@ -128,7 +127,7 @@ export class TablonesService {
                 attributes: [
                     [
                         this.tablonRepository.sequelize.literal(
-                            `(SELECT SUM(tablones.area) as area FROM tablones INNER JOIN Cortes ON corte_id = id_corte AND activo = true)`
+                            `(SELECT SUM(tablones.area) as area FROM tablones INNER JOIN cortes ON corte_id = id_corte AND activo = true)`
                         ),
                         'area'
                     ]

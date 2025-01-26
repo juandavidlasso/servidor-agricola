@@ -8,7 +8,7 @@ import { Maquinaria } from 'src/modules/maquinaria/entities/maquinaria.entity';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Aplicacion_mantenimientos'
+    tableName: 'aplicacion_mantenimientos'
 })
 export class AplicacionMantenimiento extends Model<AplicacionMantenimiento> {
     @Field(() => Int, { nullable: false })

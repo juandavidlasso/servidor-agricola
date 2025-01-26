@@ -8,7 +8,7 @@ import { AplicacionPlagas } from '../../aplicacion-plagas/entities/aplicacion-pl
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Tablones'
+    tableName: 'tablones'
 })
 export class Tablon extends Model<Tablon> {
     @Field(() => Int, { nullable: false })

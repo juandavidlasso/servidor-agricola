@@ -9,7 +9,6 @@ type Usuarios {
   email: String!
   password: String!
   rol: Int!
-  codigo: String
 }
 
 type AuthResponse {
@@ -366,7 +365,6 @@ input CreateUsuarioInput {
   email: String!
   password: String!
   rol: Int = 2
-  codigo: String
 }
 
 input UpdateUsuarioInput {
@@ -375,7 +373,6 @@ input UpdateUsuarioInput {
   email: String
   password: String
   rol: Int = 2
-  codigo: String
   id_usuario: Int!
 }
 

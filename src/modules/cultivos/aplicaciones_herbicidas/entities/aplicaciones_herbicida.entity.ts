@@ -8,7 +8,7 @@ import { AplicacionHerbicida } from '../../aplicacion-herbicidas/entities/aplica
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Aplicaciones_herbicidas'
+    tableName: 'aplicaciones_herbicidas'
 })
 export class AplicacionesHerbicida extends Model<AplicacionesHerbicida> {
     @Field(() => Int, { nullable: false })

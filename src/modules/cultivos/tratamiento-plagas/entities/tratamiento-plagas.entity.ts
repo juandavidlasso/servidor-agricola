@@ -7,7 +7,7 @@ import { AplicacionPlagas } from '../../aplicacion-plagas/entities/aplicacion-pl
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Tratamiento_plagas'
+    tableName: 'tratamiento_plagas'
 })
 export class TratamientoPlagas extends Model<TratamientoPlagas> {
     @Field(() => Int, { nullable: false })

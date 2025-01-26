@@ -9,10 +9,6 @@ import { Corte } from '../cortes/entities/corte.entity';
 import sequelize from 'sequelize';
 import { CortesService } from '../cortes/cortes.service';
 import { Cosecha } from '../cosechas/entities/cosecha.entity';
-import { AplicacionHerbicida } from '../aplicacion-herbicidas/entities/aplicacion-herbicida.entity';
-import { AplicacionFertilizante } from '../aplicacion-fertilizantes/entities/aplicacion-fertilizante.entity';
-import { AplicacionesHerbicida } from '../aplicaciones_herbicidas/entities/aplicaciones_herbicida.entity';
-import { TratamientoHerbicida } from '../tratamiento-herbicidas/entities/tratamiento-herbicida.entity';
 
 @Injectable()
 export class SuertesService {
@@ -52,7 +48,7 @@ export class SuertesService {
                                     createdAt: [
                                         this.suerteRepository.sequelize.literal(`(
 								SELECT MAX(createdAt)
-								FROM Suertes AS suerte
+								FROM suertes AS suerte
 								WHERE
 								suerte.nombre = '${createSuerteInput.nombre}'
 								)`),
@@ -381,19 +377,19 @@ export class SuertesService {
                         'zona',
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT MAX(fecha_corte) from cortes where suerte_id = suerte.id_suerte)'
+                                '(SELECT MAX(fecha_corte) from cortes where suerte_id = Suerte.id_suerte)'
                             ),
                             'createdAt'
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = suerte.id_suerte))'
+                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
                             ),
                             'area'
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT SUM(tablones.area) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = suerte.id_suerte))'
+                                '(SELECT SUM(tablones.area) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
                             ),
                             'renovada'
                         ]
@@ -431,19 +427,19 @@ export class SuertesService {
                         'zona',
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT MAX(fecha_corte) from cortes where suerte_id = suerte.id_suerte)'
+                                '(SELECT MAX(fecha_corte) from cortes where suerte_id = Suerte.id_suerte)'
                             ),
                             'createdAt'
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = suerte.id_suerte))'
+                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
                             ),
                             'area'
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT SUM(tablones.area) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = suerte.id_suerte))'
+                                '(SELECT SUM(tablones.area) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
                             ),
                             'renovada'
                         ]

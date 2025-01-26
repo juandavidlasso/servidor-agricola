@@ -4,8 +4,6 @@ import { CreateCorteInput } from './dto/create-corte.input';
 import { UpdateCorteInput } from './dto/update-corte.input';
 import { Corte } from './entities/corte.entity';
 import { Suerte } from '../suertes/entities/suerte.entity';
-import { Cosecha } from '../cosechas/entities/cosecha.entity';
-import { Op } from 'sequelize';
 
 @Injectable()
 export class CortesService {

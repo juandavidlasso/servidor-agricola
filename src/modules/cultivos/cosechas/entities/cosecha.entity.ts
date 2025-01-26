@@ -7,7 +7,7 @@ import { Corte } from '../../cortes/entities/corte.entity';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Cosechas'
+    tableName: 'cosechas'
 })
 export class Cosecha extends Model<Cosecha> {
     @Field(() => Int, { nullable: false })

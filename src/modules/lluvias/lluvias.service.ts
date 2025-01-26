@@ -64,7 +64,7 @@ export class LluviasService {
         try {
             if (filterLluviaInput.inicial !== 0 && filterLluviaInput.final === 0) {
                 return await this.lluviaRepository.sequelize.query(
-                    `SELECT id_lluvia, fecha, cantidad FROM Lluvias JOIN aplicacion_lluvias ON id_lluvia = lluvia_id WHERE EXTRACT(MONTH FROM fecha)=:fechaInicial AND EXTRACT(YEAR FROM fecha)=:fechaYear AND pluviometro_id=:idPluviometro ORDER BY EXTRACT(MONTH FROM fecha), EXTRACT(DAY FROM fecha) ASC;`,
+                    `SELECT id_lluvia, fecha, cantidad FROM lluvias JOIN aplicacion_lluvias ON id_lluvia = lluvia_id WHERE EXTRACT(MONTH FROM fecha)=:fechaInicial AND EXTRACT(YEAR FROM fecha)=:fechaYear AND pluviometro_id=:idPluviometro ORDER BY EXTRACT(MONTH FROM fecha), EXTRACT(DAY FROM fecha) ASC;`,
                     {
                         replacements: {
                             fechaInicial: filterLluviaInput.inicial,
@@ -76,7 +76,7 @@ export class LluviasService {
                 );
             } else if (filterLluviaInput.inicial !== 0 && filterLluviaInput.final !== 0) {
                 return await this.lluviaRepository.sequelize.query(
-                    `SELECT id_lluvia, fecha, cantidad FROM Lluvias JOIN aplicacion_lluvias ON id_lluvia = lluvia_id WHERE EXTRACT(MONTH FROM fecha)>=:fechaInicial AND EXTRACT(MONTH FROM fecha)<=:fechaFinal AND EXTRACT(YEAR FROM fecha)=:fechaYear AND pluviometro_id=:idPluviometro ORDER BY EXTRACT(MONTH FROM fecha), EXTRACT(DAY FROM fecha) ASC;`,
+                    `SELECT id_lluvia, fecha, cantidad FROM lluvias JOIN aplicacion_lluvias ON id_lluvia = lluvia_id WHERE EXTRACT(MONTH FROM fecha)>=:fechaInicial AND EXTRACT(MONTH FROM fecha)<=:fechaFinal AND EXTRACT(YEAR FROM fecha)=:fechaYear AND pluviometro_id=:idPluviometro ORDER BY EXTRACT(MONTH FROM fecha), EXTRACT(DAY FROM fecha) ASC;`,
                     {
                         replacements: {
                             fechaInicial: filterLluviaInput.inicial,
@@ -89,7 +89,7 @@ export class LluviasService {
                 );
             } else if (filterLluviaInput.inicial === 0 && filterLluviaInput.final === 0) {
                 return await this.lluviaRepository.sequelize.query(
-                    `SELECT id_lluvia, fecha, cantidad FROM Lluvias JOIN aplicacion_lluvias ON id_lluvia = lluvia_id WHERE EXTRACT(YEAR FROM fecha)=:fechaYear AND pluviometro_id=:idPluviometro ORDER BY EXTRACT(MONTH FROM fecha), EXTRACT(DAY FROM fecha) ASC;`,
+                    `SELECT id_lluvia, fecha, cantidad FROM lluvias JOIN aplicacion_lluvias ON id_lluvia = lluvia_id WHERE EXTRACT(YEAR FROM fecha)=:fechaYear AND pluviometro_id=:idPluviometro ORDER BY EXTRACT(MONTH FROM fecha), EXTRACT(DAY FROM fecha) ASC;`,
                     {
                         replacements: {
                             fechaYear: filterLluviaInput.year,

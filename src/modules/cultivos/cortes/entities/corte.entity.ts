@@ -12,7 +12,7 @@ import { Cosecha } from '../../cosechas/entities/cosecha.entity';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Cortes'
+    tableName: 'cortes'
 })
 export class Corte extends Model<Corte> {
     @Field(() => Int, { nullable: false })

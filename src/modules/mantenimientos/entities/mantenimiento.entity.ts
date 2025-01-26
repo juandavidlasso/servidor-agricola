@@ -8,7 +8,7 @@ import { Insumo } from 'src/modules/insumos/entities/insumo.entity';
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Mantenimientos'
+    tableName: 'mantenimientos'
 })
 export class Mantenimiento extends Model<Mantenimiento> {
     @Field(() => Int, { nullable: false })

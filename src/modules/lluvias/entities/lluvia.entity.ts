@@ -7,7 +7,7 @@ import { AplicacionLluvia } from 'src/modules/cultivos/aplicacion_lluvias/entiti
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Lluvias'
+    tableName: 'lluvias'
 })
 export class Lluvia extends Model<Lluvia> {
     @Field(() => Int, { nullable: false })

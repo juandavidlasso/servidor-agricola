@@ -8,7 +8,7 @@ import { Pluviometro } from 'src/modules/pluviometros/entities/pluviometro.entit
     timestamps: false,
     createdAt: false,
     updatedAt: false,
-    tableName: 'Aplicacion_lluvias'
+    tableName: 'aplicacion_lluvias'
 })
 export class AplicacionLluvia extends Model<AplicacionLluvia> {
     @Field(() => Int, { nullable: false })
