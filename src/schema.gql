@@ -468,6 +468,7 @@ input UpdateAplicacionHerbicidaInput {
   fecha: String
   tipo: String
   id_aphe: Int!
+  duplicate: Boolean!
 }
 
 input CreateTratamientoHerbicidaInput {
@@ -510,6 +511,7 @@ input UpdateAplicacionFertilizanteInput {
   fecha: String
   tipo: String
   id_apfe: Int!
+  duplicate: Boolean!
 }
 
 input CreateTratamientoFertilizanteInput {

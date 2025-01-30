@@ -35,6 +35,7 @@ export class AplicacionesHerbicidasService {
     async obtenerAplicacionesHerbicidasCorteService(corte_id: number): Promise<AplicacionesHerbicida[]> {
         try {
             return await this.aplicacionesHerbicidasRepository.findAll({
+                order: [[{ model: AplicacionHerbicida, as: 'aplicacionHerbicida' }, 'fecha', 'DESC']],
                 include: [
                     {
                         model: AplicacionHerbicida,

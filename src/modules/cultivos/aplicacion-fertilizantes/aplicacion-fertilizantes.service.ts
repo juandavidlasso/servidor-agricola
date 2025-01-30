@@ -9,7 +9,9 @@ import { TratamientoFertilizante } from '../tratamiento-fertilizantes/entities/t
 export class AplicacionFertilizantesService {
     constructor(
         @InjectModel(AplicacionFertilizante)
-        private readonly aplicacionFertilizanteRepository: typeof AplicacionFertilizante
+        private readonly aplicacionFertilizanteRepository: typeof AplicacionFertilizante,
+        @InjectModel(TratamientoFertilizante)
+        private readonly tratamientosFertilizantes: typeof TratamientoFertilizante
     ) {}
 
     async agregarAplicacionFertilizanteService(
@@ -45,6 +47,33 @@ export class AplicacionFertilizantesService {
             const aplicacionHerbicida = await this.aplicacionFertilizanteRepository.findOne({ where: { id_apfe } });
 
             if (!aplicacionHerbicida) throw new Error('La aplicación no esta registrada.');
+
+            if (updateAplicacionFertilizanteInput.duplicate) {
+                const newApplication = await this.aplicacionFertilizanteRepository.create({
+                    fecha: updateAplicacionFertilizanteInput.fecha,
+                    tipo: updateAplicacionFertilizanteInput.tipo
+                });
+
+                const tratamientos = await this.tratamientosFertilizantes.findAll({
+                    where: {
+                        apfe_id: updateAplicacionFertilizanteInput.id_apfe
+                    }
+                });
+                if (tratamientos.length > 0) {
+                    for (let index = 0; index < tratamientos.length; index++) {
+                        await this.tratamientosFertilizantes.create({
+                            producto: tratamientos[index].producto,
+                            dosis: tratamientos[index].dosis,
+                            presentacion: tratamientos[index].presentacion,
+                            valor: tratamientos[index].valor,
+                            aplico: tratamientos[index].aplico,
+                            nota: tratamientos[index].nota,
+                            apfe_id: newApplication.dataValues.id_apfe
+                        });
+                    }
+                }
+                return newApplication;
+            }
 
             return await aplicacionHerbicida.update(updateAplicacionFertilizanteInput);
         } catch (error) {

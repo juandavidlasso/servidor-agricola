@@ -9,7 +9,9 @@ import { TratamientoHerbicida } from '../tratamiento-herbicidas/entities/tratami
 export class AplicacionHerbicidasService {
     constructor(
         @InjectModel(AplicacionHerbicida)
-        private readonly aplicacionHerbicidaRepository: typeof AplicacionHerbicida
+        private readonly aplicacionHerbicidaRepository: typeof AplicacionHerbicida,
+        @InjectModel(TratamientoHerbicida)
+        private readonly tratamientosHerbicidas: typeof TratamientoHerbicida
     ) {}
 
     async agregarAplicacionHerbicidaService(
@@ -45,6 +47,33 @@ export class AplicacionHerbicidasService {
             const aplicacionHerbicida = await this.aplicacionHerbicidaRepository.findOne({ where: { id_aphe } });
 
             if (!aplicacionHerbicida) throw new Error('La aplicación no esta registrada.');
+
+            if (updateAplicacionHerbicidaInput.duplicate) {
+                const newApplication = await this.aplicacionHerbicidaRepository.create({
+                    fecha: updateAplicacionHerbicidaInput.fecha,
+                    tipo: updateAplicacionHerbicidaInput.tipo
+                });
+
+                const tratamientos = await this.tratamientosHerbicidas.findAll({
+                    where: {
+                        aphe_id: updateAplicacionHerbicidaInput.id_aphe
+                    }
+                });
+                if (tratamientos.length > 0) {
+                    for (let index = 0; index < tratamientos.length; index++) {
+                        await this.tratamientosHerbicidas.create({
+                            producto: tratamientos[index].producto,
+                            dosis: tratamientos[index].dosis,
+                            presentacion: tratamientos[index].presentacion,
+                            valor: tratamientos[index].valor,
+                            aplico: tratamientos[index].aplico,
+                            nota: tratamientos[index].nota,
+                            aphe_id: newApplication.dataValues.id_aphe
+                        });
+                    }
+                }
+                return newApplication;
+            }
 
             return await aplicacionHerbicida.update(updateAplicacionHerbicidaInput);
         } catch (error) {

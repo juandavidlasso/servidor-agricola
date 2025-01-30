@@ -71,8 +71,8 @@ config();
 
         // Conexion con Sequelize en DEV
         SequelizeModule.forRoot({
-            // Prod
             dialect: 'mysql',
+            // Prod
             host: process.env.STACKHERO_MARIADB_HOST,
             port: +process.env.STACKHERO_MARIADB_PORT,
             username: process.env.STACKHERO_MARIADB_USERNAME,
