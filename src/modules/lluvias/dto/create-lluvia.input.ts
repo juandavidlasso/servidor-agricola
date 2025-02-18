@@ -12,6 +12,16 @@ export class CreateLluviaInput {
     @IsNumber()
     @IsNotEmpty()
     cantidad: number;
+
+    @Field(() => Int, { nullable: false })
+    @IsNumber()
+    @IsNotEmpty()
+    pluviometro_id: number;
+
+    @Field(() => Int, { nullable: false })
+    @IsNumber()
+    @IsNotEmpty()
+    lluvia_id: number;
 }
 
 @InputType()

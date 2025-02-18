@@ -1,5 +1,6 @@
 import { InjectModel } from '@nestjs/sequelize';
 import { Injectable } from '@nestjs/common';
+import { Op } from 'sequelize';
 import { CreatePluviometroInput } from './dto/create-pluviometro.input';
 import { Pluviometro } from './entities/pluviometro.entity';
 import { AplicacionLluvia } from '../cultivos/aplicacion_lluvias/entities/aplicacion_lluvia.entity';
@@ -22,14 +23,28 @@ export class PluviometrosService {
 
     async obtenerPluviometrosYLluviasService(): Promise<Pluviometro[]> {
         try {
+            const actualDate = new Date();
+            const inicioMes = new Date(actualDate.getFullYear(), actualDate.getMonth(), 1);
+            const finMes = new Date(actualDate.getFullYear(), actualDate.getMonth() + 1, 0);
+            const formatearFecha = (fecha: Date) => fecha.toISOString().split('T')[0];
+
             return await this.pluviometroRepository.findAll({
                 order: [['nombre', 'ASC']],
                 include: [
                     {
                         model: AplicacionLluvia,
                         required: false,
-                        attributes: { exclude: ['fecha', 'cantidad'] },
-                        include: [{ model: Lluvia, required: true }]
+                        include: [
+                            {
+                                model: Lluvia,
+                                required: true,
+                                where: {
+                                    fecha: {
+                                        [Op.between]: [formatearFecha(inicioMes), formatearFecha(finMes)]
+                                    }
+                                }
+                            }
+                        ]
                     }
                 ]
             });

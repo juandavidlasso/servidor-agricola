@@ -7,11 +7,11 @@ import { CreateAplicacionLluviaInput } from './dto/create-aplicacion_lluvia.inpu
 export class AplicacionLluviasResolver {
     constructor(private readonly aplicacionLluviasService: AplicacionLluviasService) {}
 
-    @Mutation(() => [Number], { name: 'agregarAplicacionLluvia' })
+    @Mutation(() => AplicacionLluvia, { name: 'agregarAplicacionLluvia' })
     async agregarAplicacionLluvia(
-        @Args('createAplicacionLluviaInput', { type: () => [CreateAplicacionLluviaInput] })
-        createAplicacionLluviaInput: CreateAplicacionLluviaInput[]
-    ): Promise<number[]> {
+        @Args('createAplicacionLluviaInput', { type: () => CreateAplicacionLluviaInput })
+        createAplicacionLluviaInput: CreateAplicacionLluviaInput
+    ): Promise<AplicacionLluvia> {
         return this.aplicacionLluviasService.agregarAplicacionLluviaService(createAplicacionLluviaInput);
     }
 

@@ -9,8 +9,10 @@ import { Pluviometro } from '../pluviometros/entities/pluviometro.entity';
 export class LluviasResolver {
     constructor(private readonly lluviasService: LluviasService) {}
 
-    @Mutation(() => Lluvia, { name: 'agregarLluvia' })
-    async agregarLluvia(@Args('createLluviaInput') createLluviaInput: CreateLluviaInput): Promise<Lluvia> {
+    @Mutation(() => [Number], { name: 'agregarLluvia' })
+    async agregarLluvia(
+        @Args('createLluviaInput', { type: () => [CreateLluviaInput] }) createLluviaInput: CreateLluviaInput[]
+    ): Promise<number[]> {
         return this.lluviasService.agregarLluviaService(createLluviaInput);
     }
 

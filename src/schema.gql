@@ -328,7 +328,7 @@ type Mutation {
   agregarAplicacionesFertilizantes(createAplicacionesFertilizanteInput: [CreateAplicacionesFertilizanteInput!]!): [Float!]!
   eliminarAplicacionesFertilizantes(id_aplicaciones_fertilizantes: Int!): Boolean!
   agregarPluviometro(createPluviometroInput: CreatePluviometroInput!): Pluviometro!
-  agregarLluvia(createLluviaInput: CreateLluviaInput!): Lluvia!
+  agregarLluvia(createLluviaInput: [CreateLluviaInput!]!): [Float!]!
   actualizarLluvia(updateLluviaInput: UpdateLluviaInput!): Lluvia!
   eliminarLluvia(id_lluvia: Int!): Boolean!
   agregarTratamientoPlagas(createTratamientoPlagasInput: CreateTratamientoPlagasInput!): TratamientoPlagas!
@@ -344,7 +344,7 @@ type Mutation {
   eliminarAplicacionRiego(ids: [Int!]!): [Float!]!
   agregarCosecha(createCosechaInput: CreateCosechaInput!): Cosecha!
   actualizarCosecha(updateCosechaInput: UpdateCosechaInput!): Cosecha!
-  agregarAplicacionLluvia(createAplicacionLluviaInput: [CreateAplicacionLluviaInput!]!): [Float!]!
+  agregarAplicacionLluvia(createAplicacionLluviaInput: CreateAplicacionLluviaInput!): AplicacionLluvia!
   eliminarAplicacionLluvia(id_aplicacion_lluvia: Int!): Boolean!
   agregarMaquinaria(createMaquinariaInput: CreateMaquinariaInput!): Maquinaria!
   actualizarMaquinaria(updateMaquinariaInput: UpdateMaquinariaInput!): Maquinaria!
@@ -548,11 +548,15 @@ input CreatePluviometroInput {
 input CreateLluviaInput {
   fecha: String!
   cantidad: Int!
+  pluviometro_id: Int!
+  lluvia_id: Int!
 }
 
 input UpdateLluviaInput {
   fecha: String
   cantidad: Int
+  pluviometro_id: Int
+  lluvia_id: Int
   id_lluvia: Int!
 }
 

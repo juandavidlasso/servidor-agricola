@@ -389,7 +389,7 @@ export class SuertesService {
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT SUM(tablones.area) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
+                                '(SELECT COALESCE(SUM(tablones.area), 0) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
                             ),
                             'renovada'
                         ]
@@ -439,7 +439,7 @@ export class SuertesService {
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT SUM(tablones.area) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
+                                '(SELECT COALESCE(SUM(tablones.area), 0) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
                             ),
                             'renovada'
                         ]

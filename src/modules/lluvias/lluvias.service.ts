@@ -13,12 +13,28 @@ export class LluviasService {
         @InjectModel(Lluvia)
         private readonly lluviaRepository: typeof Lluvia,
         @InjectModel(Pluviometro)
-        private readonly pluviometroRepository: typeof Pluviometro
+        private readonly pluviometroRepository: typeof Pluviometro,
+        @InjectModel(AplicacionLluvia)
+        private readonly aplicacionLluviaRepository: typeof AplicacionLluvia
     ) {}
 
-    async agregarLluviaService(createLluviaInput: CreateLluviaInput): Promise<Lluvia> {
+    async agregarLluviaService(createLluviaInput: CreateLluviaInput[]): Promise<number[]> {
         try {
-            return await this.lluviaRepository.create(createLluviaInput);
+            const aplicacionesRegistradas: number[] = [];
+            for (let index = 0; index < createLluviaInput.length; index++) {
+                const lluvia = await this.lluviaRepository.create({
+                    fecha: createLluviaInput[index].fecha,
+                    cantidad: createLluviaInput[index].cantidad
+                });
+                if (lluvia.dataValues) {
+                    const aplicacionLluvia = await this.aplicacionLluviaRepository.create({
+                        pluviometro_id: createLluviaInput[index].pluviometro_id,
+                        lluvia_id: lluvia.dataValues.id_lluvia
+                    });
+                    aplicacionesRegistradas.push(aplicacionLluvia.dataValues.id_aplicacion_lluvia);
+                }
+            }
+            return aplicacionesRegistradas;
         } catch (error) {
             throw new Error(error);
         }

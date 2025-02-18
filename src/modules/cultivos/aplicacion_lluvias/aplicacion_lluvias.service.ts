@@ -9,23 +9,9 @@ export class AplicacionLluviasService {
     @InjectModel(AplicacionLluvia)
     private readonly aplicacionLluviaRepository: typeof AplicacionLluvia;
 
-    async agregarAplicacionLluviaService(createAplicacionLluviaInput: CreateAplicacionLluviaInput[]): Promise<number[]> {
+    async agregarAplicacionLluviaService(createAplicacionLluviaInput: CreateAplicacionLluviaInput): Promise<AplicacionLluvia> {
         try {
-            let aplicacionesRegistradas: number[] = [];
-            for (let index = 0; index < createAplicacionLluviaInput.length; index++) {
-                const aplicacionRegistered = await this.aplicacionLluviaRepository.findOne({
-                    where: {
-                        pluviometro_id: createAplicacionLluviaInput[index].pluviometro_id,
-                        lluvia_id: createAplicacionLluviaInput[index].lluvia_id
-                    }
-                });
-
-                if (!aplicacionRegistered) {
-                    await this.aplicacionLluviaRepository.create(createAplicacionLluviaInput[index]);
-                    aplicacionesRegistradas.push(createAplicacionLluviaInput[index].lluvia_id);
-                }
-            }
-            return aplicacionesRegistradas;
+            return await this.aplicacionLluviaRepository.create(createAplicacionLluviaInput);
         } catch (error) {
             throw new Error(error);
         }
@@ -34,8 +20,8 @@ export class AplicacionLluviasService {
     async eliminarAplicacionLluviaService(id_aplicacion_lluvia: number): Promise<boolean> {
         let successOperation: boolean = false;
         try {
-            return await this.aplicacionLluviaRepository.destroy({ where: { id_aplicacion_lluvia } }).then((rows) => {
-                if (rows === 1) {
+            return await this.aplicacionLluviaRepository.destroy({ where: { lluvia_id: id_aplicacion_lluvia } }).then((rows) => {
+                if (rows === 1 || rows >= 1) {
                     successOperation = true;
                 }
                 return successOperation;
