@@ -178,6 +178,7 @@ type Pluviometro {
   id_pluviometro: Int!
   nombre: Int!
   suertesAsociadas: String
+  totalMes: Float
   listAplicacionesLluvias: [AplicacionLluvia!]!
 }
 
@@ -257,19 +258,15 @@ type Query {
   obtenerAplicacionesHerbicidasCorte(corte_id: Int!): [AplicacionesHerbicida!]!
   obtenerAplicacionesFertilizantes: [AplicacionFertilizante!]!
   obtenerAplicacionesFertilizantesCorte(corte_id: Int!): [AplicacionesFertilizante!]!
-  obtenerPluviometrosYLluvias: [Pluviometro!]!
+  obtenerPluviometrosYLluvias(filterLluviasInput: FilterLluviasInput!): [Pluviometro!]!
+  obtenerLluviasYear(year: Float!): [Pluviometro!]!
   obtenerLluvias: [Lluvia!]!
-  obtenerLluviasPorPluviometro(filterLluviaInput: FilterLluviaInput!): [Lluvia!]!
-  obtenerLluviasMesActual: [Pluviometro!]!
-  obtenerLluviasMesYear(filterLluviaMesYearInput: FilterLluviaMesYearInput!): [Pluviometro!]!
-  obtenerLluviasYear(filterLluviaMesYearInput: FilterLluviaMesYearInput!): [Pluviometro!]!
   obtenerPromedioLluvias(year: Int!): [Lluvia!]!
   obtenerTratamientoPlagas: [TratamientoPlagas!]!
   obtenerRiegosCorte(corte_id: Int!): [Riego!]!
   obtenerRiegosMayor(corte_id: Int!): Float!
   obtenerCosechaCorte(id_corte: Int!): Cosecha!
   obtenerResumenLluviasYear(year: Int!): [AplicacionLluvia!]!
-  obtenerResumenPluviometroYear(year: Int!): [AplicacionLluvia!]!
   obtenerMaquinarias: [Maquinaria!]!
   obtenerInsumos: [Insumo!]!
   obtenerAplicacionesMantenimiento(maquinariaId: Int!): [AplicacionMantenimiento!]!
@@ -281,16 +278,9 @@ input ProntuarioInput {
   fecha_fin: String!
 }
 
-input FilterLluviaInput {
-  id_pluviometro: Int!
-  inicial: Int
-  final: Int
-  year: Int!
-}
-
-input FilterLluviaMesYearInput {
-  month: Int!
-  year: Int!
+input FilterLluviasInput {
+  month: Int
+  year: Int
 }
 
 type Mutation {

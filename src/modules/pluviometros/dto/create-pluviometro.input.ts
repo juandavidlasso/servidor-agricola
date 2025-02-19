@@ -13,3 +13,16 @@ export class CreatePluviometroInput {
     @IsOptional()
     suertesAsociadas?: string;
 }
+
+@InputType()
+export class FilterLluviasInput {
+    @Field(() => Int, { nullable: true })
+    @IsNumber()
+    @IsOptional()
+    month?: number;
+
+    @Field(() => Int, { nullable: true })
+    @IsNumber()
+    @IsOptional()
+    year?: number;
+}

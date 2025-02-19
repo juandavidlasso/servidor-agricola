@@ -46,20 +46,4 @@ export class AplicacionLluviasService {
             throw new Error(error);
         }
     }
-
-    async obtenerResumenPluviometroYearService(year: number): Promise<AplicacionLluvia[]> {
-        try {
-            return await this.aplicacionLluviaRepository.sequelize.query(
-                `SELECT aplicacion_lluvias.pluviometro_id, SUM(lluvias.cantidad) AS cantidad FROM lluvias JOIN aplicacion_lluvias ON lluvias.id_lluvia = aplicacion_lluvias.lluvia_id WHERE YEAR(lluvias.fecha) = :fecano GROUP BY aplicacion_lluvias.pluviometro_id`,
-                {
-                    replacements: {
-                        fecano: year
-                    },
-                    type: QueryTypes.SELECT
-                }
-            );
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
 }

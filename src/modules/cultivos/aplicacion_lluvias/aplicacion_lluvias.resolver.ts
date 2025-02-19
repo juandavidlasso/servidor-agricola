@@ -26,9 +26,4 @@ export class AplicacionLluviasResolver {
     async obtenerResumenLluviasYear(@Args('year', { type: () => Int }) year: number): Promise<AplicacionLluvia[]> {
         return this.aplicacionLluviasService.obtenerResumenLluviasYearService(year);
     }
-
-    @Query(() => [AplicacionLluvia], { name: 'obtenerResumenPluviometroYear' })
-    async obtenerResumenPluviometroYear(@Args('year', { type: () => Int }) year: number): Promise<AplicacionLluvia[]> {
-        return this.aplicacionLluviasService.obtenerResumenPluviometroYearService(year);
-    }
 }
