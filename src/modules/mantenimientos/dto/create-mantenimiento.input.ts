@@ -23,10 +23,10 @@ export class CreateMantenimientoInput {
     @IsNotEmpty()
     tipoCambio: boolean;
 
-    @Field(() => Int, { nullable: false })
-    @IsNumber()
+    @Field(() => String, { nullable: false })
+    @IsString()
     @IsNotEmpty()
-    cantidad: number;
+    cantidad: string
 
     @Field(() => Int, { nullable: false })
     @IsNumber()

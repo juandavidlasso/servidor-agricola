@@ -31,9 +31,9 @@ export class Mantenimiento extends Model<Mantenimiento> {
     @Column({ allowNull: false, type: DataType.BOOLEAN })
     tipoCambio: boolean;
 
-    @Field(() => Int, { nullable: false })
-    @Column({ allowNull: false, type: DataType.INTEGER })
-    cantidad: number;
+    @Field(() => String, { nullable: false })
+    @Column({ allowNull: false, type: DataType.STRING })
+    cantidad: string
 
     @Field(() => Int, { nullable: false })
     @ForeignKey(() => Insumo)

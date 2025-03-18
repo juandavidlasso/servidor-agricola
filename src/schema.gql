@@ -221,7 +221,7 @@ type Mantenimiento {
   horaCambio: String!
   proximoCambio: Int!
   tipoCambio: Boolean!
-  cantidad: Int!
+  cantidad: String!
   insumoId: Int!
   ApMantId: Int!
 }
@@ -671,7 +671,7 @@ input CreateMantenimientoInput {
   horaCambio: String!
   proximoCambio: Int!
   tipoCambio: Boolean!
-  cantidad: Int!
+  cantidad: String!
   insumoId: Int!
   ApMantId: Int!
 }
@@ -681,7 +681,7 @@ input UpdateMantenimientoInput {
   horaCambio: String
   proximoCambio: Int
   tipoCambio: Boolean
-  cantidad: Int
+  cantidad: String
   insumoId: Int
   ApMantId: Int
   idMantenimiento: Int!
