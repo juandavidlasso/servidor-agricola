@@ -308,7 +308,7 @@ type Mutation {
   agregarAplicacionLabores(createAplicacionLaboresInput: [CreateAplicacionLaboresInput!]!): [Float!]!
   eliminarAplicacionLabores(id_aplicacion_labores: Int!): Boolean!
   agregarAplicacionesHerbicidas(createAplicacionesHerbicidaInput: [CreateAplicacionesHerbicidaInput!]!): [Float!]!
-  eliminarAplicacionesHerbicidasService(id_aplicaciones_herbicidas: Int!): Boolean!
+  eliminarAplicacionesHerbicidas(id_aplicaciones_herbicidas: Int!): Boolean!
   agregarAplicacionFertilizante(createAplicacionFertilizanteInput: CreateAplicacionFertilizanteInput!): AplicacionFertilizante!
   actualizarAplicacionFertilizante(updateAplicacionFertilizanteInput: UpdateAplicacionFertilizanteInput!): AplicacionFertilizante!
   eliminarAplicacionFertilizante(id_apfe: Int!): Boolean!
