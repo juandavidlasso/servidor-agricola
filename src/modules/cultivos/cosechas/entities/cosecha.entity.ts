@@ -30,6 +30,10 @@ export class Cosecha extends Model<Cosecha> {
     @Column({ allowNull: true, type: DataType.INTEGER })
     numeroMulas?: number;
 
+    @Field(() => String, { nullable: true })
+    @Column({ allowNull: true, type: DataType.STRING })
+    nota?: string;
+
     @Field(() => Int, { nullable: false })
     @ForeignKey(() => Corte)
     @Column({ allowNull: false, type: DataType.INTEGER })

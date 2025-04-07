@@ -1,5 +1,5 @@
 import { InputType, Int, Field, Float } from '@nestjs/graphql';
-import { IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreateCosechaInput {
@@ -22,6 +22,11 @@ export class CreateCosechaInput {
     @IsOptional()
     @IsNumber()
     numeroMulas?: number;
+
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @IsString()
+    nota?: string;
 
     @Field(() => Int, { nullable: false })
     @IsNotEmpty()
