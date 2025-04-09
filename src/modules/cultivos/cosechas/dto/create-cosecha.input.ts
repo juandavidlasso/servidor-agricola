@@ -18,7 +18,7 @@ export class CreateCosechaInput {
     @IsNumber()
     numeroVagones?: number;
 
-    @Field(() => Int, { nullable: true })
+    @Field(() => Float, { nullable: true })
     @IsOptional()
     @IsNumber()
     numeroMulas?: number;

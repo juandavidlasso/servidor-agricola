@@ -125,7 +125,7 @@ type Cosecha {
   peso: Float!
   rendimiento: Float
   numeroVagones: Int
-  numeroMulas: Int
+  numeroMulas: Float
   nota: String
   corte_id: Int!
   cortePadre: Corte!
@@ -604,7 +604,7 @@ input CreateCosechaInput {
   peso: Float!
   rendimiento: Float
   numeroVagones: Int
-  numeroMulas: Int
+  numeroMulas: Float
   nota: String
   corte_id: Int!
 }
@@ -613,7 +613,7 @@ input UpdateCosechaInput {
   peso: Float
   rendimiento: Float
   numeroVagones: Int
-  numeroMulas: Int
+  numeroMulas: Float
   nota: String
   corte_id: Int
   id_cosecha: Int!

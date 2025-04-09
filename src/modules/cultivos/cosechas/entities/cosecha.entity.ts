@@ -26,8 +26,8 @@ export class Cosecha extends Model<Cosecha> {
     @Column({ allowNull: true, type: DataType.INTEGER })
     numeroVagones?: number;
 
-    @Field(() => Int, { nullable: true })
-    @Column({ allowNull: true, type: DataType.INTEGER })
+    @Field(() => Float, { nullable: true })
+    @Column({ allowNull: true, type: DataType.FLOAT })
     numeroMulas?: number;
 
     @Field(() => String, { nullable: true })
