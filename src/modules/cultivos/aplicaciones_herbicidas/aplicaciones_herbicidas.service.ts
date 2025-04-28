@@ -40,6 +40,7 @@ export class AplicacionesHerbicidasService {
                     {
                         model: AplicacionHerbicida,
                         required: true,
+                        attributes: ['id_aphe', 'fecha', 'tipo'],
                         include: [
                             {
                                 model: TratamientoHerbicida,

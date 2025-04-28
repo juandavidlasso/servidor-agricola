@@ -46,6 +46,10 @@ export class Labores extends Model<Labores> {
     @Column({ allowNull: true, type: DataType.STRING })
     nota?: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({ allowNull: true, type: DataType.STRING })
+    suertes?: string;
+
     @HasMany(() => AplicacionLabores)
     listAplicacionLabores: AplicacionLabores[];
 }

@@ -39,6 +39,7 @@ export class AplicacionesFertilizantesService {
                     {
                         model: AplicacionFertilizante,
                         required: true,
+                        attributes: ['id_apfe', 'fecha', 'tipo'],
                         include: [
                             {
                                 model: TratamientoFertilizante,

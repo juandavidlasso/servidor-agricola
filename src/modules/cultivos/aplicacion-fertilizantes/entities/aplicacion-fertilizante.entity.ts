@@ -23,6 +23,10 @@ export class AplicacionFertilizante extends Model<AplicacionFertilizante> {
     @Column({ allowNull: false, type: DataType.STRING })
     tipo: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({ allowNull: true, type: DataType.STRING })
+    suertes?: string;
+
     @Field(() => [TratamientoFertilizante])
     @HasMany(() => TratamientoFertilizante)
     listTratamientoFertilizante: TratamientoFertilizante[];

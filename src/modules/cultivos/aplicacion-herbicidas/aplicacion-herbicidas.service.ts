@@ -4,6 +4,7 @@ import { CreateAplicacionHerbicidaInput } from './dto/create-aplicacion-herbicid
 import { UpdateAplicacionHerbicidaInput } from './dto/update-aplicacion-herbicida.input';
 import { AplicacionHerbicida } from './entities/aplicacion-herbicida.entity';
 import { TratamientoHerbicida } from '../tratamiento-herbicidas/entities/tratamiento-herbicida.entity';
+import { AplicacionesHerbicida } from '../aplicaciones_herbicidas/entities/aplicaciones_herbicida.entity';
 
 @Injectable()
 export class AplicacionHerbicidasService {
@@ -11,7 +12,9 @@ export class AplicacionHerbicidasService {
         @InjectModel(AplicacionHerbicida)
         private readonly aplicacionHerbicidaRepository: typeof AplicacionHerbicida,
         @InjectModel(TratamientoHerbicida)
-        private readonly tratamientosHerbicidas: typeof TratamientoHerbicida
+        private readonly tratamientosHerbicidas: typeof TratamientoHerbicida,
+        @InjectModel(AplicacionesHerbicida)
+        private readonly aplicacionesHerbicidaRepository: typeof AplicacionesHerbicida
     ) {}
 
     async agregarAplicacionHerbicidaService(
@@ -28,6 +31,17 @@ export class AplicacionHerbicidasService {
         try {
             return await this.aplicacionHerbicidaRepository.findAll({
                 order: [['fecha', 'DESC']],
+                attributes: [
+                    'id_aphe',
+                    'fecha',
+                    'tipo',
+                    [
+                        this.aplicacionHerbicidaRepository.sequelize.literal(
+                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicaciones_herbicidas ahs ON c.id_corte = ahs.corte_id WHERE ahs.aphe_id = AplicacionHerbicida.id_aphe)'
+                        ),
+                        'suertes'
+                    ]
+                ],
                 include: [
                     {
                         model: TratamientoHerbicida
@@ -84,6 +98,7 @@ export class AplicacionHerbicidasService {
     async eliminarAplicacionHerbicidaService(id_aphe: number): Promise<boolean> {
         let successOperation: boolean = false;
         try {
+            await this.aplicacionesHerbicidaRepository.destroy({ where: { aphe_id: id_aphe } });
             return await this.aplicacionHerbicidaRepository.destroy({ where: { id_aphe } }).then((rows) => {
                 if (rows === 1) {
                     successOperation = true;

@@ -3,12 +3,15 @@ import { Injectable } from '@nestjs/common';
 import { CreateLaboresInput } from './dto/create-labores.input';
 import { UpdateLaboresInput } from './dto/update-labores.input';
 import { Labores } from './entities/labores.entity';
+import { AplicacionLabores } from '../aplicacion-labores/entities/aplicacion-labores.entity';
 
 @Injectable()
 export class LaboresService {
     constructor(
         @InjectModel(Labores)
-        private readonly laboresRepository: typeof Labores
+        private readonly laboresRepository: typeof Labores,
+        @InjectModel(AplicacionLabores)
+        private readonly aplicacionLaboresRepository: typeof AplicacionLabores
     ) {}
 
     async agregarLaborService(createLaboresInput: CreateLaboresInput): Promise<Labores> {
@@ -22,7 +25,24 @@ export class LaboresService {
     async obtenerLaboresService(): Promise<Labores[]> {
         try {
             return await this.laboresRepository.findAll({
-                order: [['fecha', 'DESC']]
+                order: [['fecha', 'DESC']],
+                attributes: [
+                    'id_labor',
+                    'fecha',
+                    'actividad',
+                    'equipo',
+                    'estado',
+                    'pases',
+                    'aplico',
+                    'costo',
+                    'nota',
+                    [
+                        this.laboresRepository.sequelize.literal(
+                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicacion_labores al ON c.id_corte = al.corte_id WHERE al.labor_id = Labores.id_labor)'
+                        ),
+                        'suertes'
+                    ]
+                ]
             });
         } catch (error) {
             throw new Error(error);
@@ -44,6 +64,7 @@ export class LaboresService {
     async eliminarLaborService(id_labor: number): Promise<boolean> {
         let successOperation: boolean = false;
         try {
+            await this.aplicacionLaboresRepository.destroy({ where: { labor_id: id_labor } });
             return await this.laboresRepository.destroy({ where: { id_labor } }).then((rows) => {
                 if (rows === 1) {
                     successOperation = true;

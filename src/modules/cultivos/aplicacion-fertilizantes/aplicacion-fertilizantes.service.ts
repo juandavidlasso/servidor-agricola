@@ -4,6 +4,7 @@ import { UpdateAplicacionFertilizanteInput } from './dto/update-aplicacion-ferti
 import { InjectModel } from '@nestjs/sequelize';
 import { AplicacionFertilizante } from './entities/aplicacion-fertilizante.entity';
 import { TratamientoFertilizante } from '../tratamiento-fertilizantes/entities/tratamiento-fertilizante.entity';
+import { AplicacionesFertilizante } from '../aplicaciones-fertilizantes/entities/aplicaciones-fertilizante.entity';
 
 @Injectable()
 export class AplicacionFertilizantesService {
@@ -11,7 +12,9 @@ export class AplicacionFertilizantesService {
         @InjectModel(AplicacionFertilizante)
         private readonly aplicacionFertilizanteRepository: typeof AplicacionFertilizante,
         @InjectModel(TratamientoFertilizante)
-        private readonly tratamientosFertilizantes: typeof TratamientoFertilizante
+        private readonly tratamientosFertilizantes: typeof TratamientoFertilizante,
+        @InjectModel(AplicacionesFertilizante)
+        private readonly aplicacionesFertilizanteRepository: typeof AplicacionesFertilizante
     ) {}
 
     async agregarAplicacionFertilizanteService(
@@ -28,6 +31,17 @@ export class AplicacionFertilizantesService {
         try {
             return await this.aplicacionFertilizanteRepository.findAll({
                 order: [['fecha', 'DESC']],
+                attributes: [
+                    'id_apfe',
+                    'fecha',
+                    'tipo',
+                    [
+                        this.aplicacionFertilizanteRepository.sequelize.literal(
+                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicaciones_fertilizantes afs ON c.id_corte = afs.corte_id WHERE afs.apfe_id = AplicacionFertilizante.id_apfe)'
+                        ),
+                        'suertes'
+                    ]
+                ],
                 include: [
                     {
                         model: TratamientoFertilizante
@@ -84,6 +98,7 @@ export class AplicacionFertilizantesService {
     async eliminarAplicacionFertilizanteService(id_apfe: number): Promise<boolean> {
         let successOperation: boolean = false;
         try {
+            await this.aplicacionesFertilizanteRepository.destroy({ where: { apfe_id: id_apfe } });
             return await this.aplicacionFertilizanteRepository.destroy({ where: { id_apfe } }).then((rows) => {
                 if (rows === 1) {
                     successOperation = true;

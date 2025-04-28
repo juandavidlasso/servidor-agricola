@@ -54,6 +54,7 @@ type Labores {
   aplico: String
   costo: Float
   nota: String
+  suertes: String
 }
 
 type AplicacionLabores {
@@ -80,6 +81,7 @@ type AplicacionHerbicida {
   id_aphe: Int!
   fecha: String!
   tipo: String!
+  suertes: String
   listTratamientoHerbicida: [TratamientoHerbicida!]!
   listAplicacionesHerbicidas: [AplicacionesHerbicida!]!
 }
@@ -108,6 +110,7 @@ type AplicacionFertilizante {
   id_apfe: Int!
   fecha: String!
   tipo: String!
+  suertes: String
   listTratamientoFertilizante: [TratamientoFertilizante!]!
   listAplicacionesFertilizantes: [AplicacionesFertilizante!]!
 }

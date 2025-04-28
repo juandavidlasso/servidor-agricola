@@ -39,7 +39,8 @@ export class AplicacionLaboresService {
                 include: [
                     {
                         model: Labores,
-                        required: true
+                        required: true,
+                        attributes: ['id_labor', 'fecha', 'actividad', 'equipo', 'estado', 'pases', 'aplico', 'costo', 'nota']
                     }
                 ],
                 where: { corte_id: id }
