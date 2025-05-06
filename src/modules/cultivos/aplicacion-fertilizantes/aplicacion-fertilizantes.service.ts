@@ -58,7 +58,10 @@ export class AplicacionFertilizantesService {
         updateAplicacionFertilizanteInput: UpdateAplicacionFertilizanteInput
     ): Promise<AplicacionFertilizante> {
         try {
-            const aplicacionHerbicida = await this.aplicacionFertilizanteRepository.findOne({ where: { id_apfe } });
+            const aplicacionHerbicida = await this.aplicacionFertilizanteRepository.findOne({
+                where: { id_apfe },
+                attributes: ['id_apfe', 'fecha', 'tipo']
+            });
 
             if (!aplicacionHerbicida) throw new Error('La aplicación no esta registrada.');
 
