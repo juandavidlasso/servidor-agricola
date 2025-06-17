@@ -383,7 +383,7 @@ export class SuertesService {
                         ],
                         [
                             this.suerteRepository.sequelize.literal(
-                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
+                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte) LIMIT 1)'
                             ),
                             'area'
                         ],
