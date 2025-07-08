@@ -8,7 +8,9 @@ import { Labores } from '../labores/entities/labores.entity';
 export class AplicacionLaboresService {
     constructor(
         @InjectModel(AplicacionLabores)
-        private readonly aplicacionLaboresRepository: typeof AplicacionLabores
+        private readonly aplicacionLaboresRepository: typeof AplicacionLabores,
+        @InjectModel(Labores)
+        private readonly laboresRepository: typeof Labores
     ) {}
 
     async agregarAplicacionLaboresService(createAplicacionLaboresInput: CreateAplicacionLaboresInput[]): Promise<number[]> {
@@ -40,7 +42,23 @@ export class AplicacionLaboresService {
                     {
                         model: Labores,
                         required: true,
-                        attributes: ['id_labor', 'fecha', 'actividad', 'equipo', 'estado', 'pases', 'aplico', 'costo', 'nota']
+                        attributes: [
+                            'id_labor',
+                            'fecha',
+                            'actividad',
+                            'equipo',
+                            'estado',
+                            'pases',
+                            'aplico',
+                            'costo',
+                            'nota',
+                            [
+                                this.laboresRepository.sequelize.literal(
+                                    '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicacion_labores al ON c.id_corte = al.corte_id WHERE al.labor_id = labor.id_labor)'
+                                ),
+                                'suertes'
+                            ]
+                        ]
                     }
                 ],
                 where: { corte_id: id }

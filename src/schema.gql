@@ -81,7 +81,6 @@ type AplicacionHerbicida {
   id_aphe: Int!
   fecha: String!
   tipo: String!
-  suertes: String
   listTratamientoHerbicida: [TratamientoHerbicida!]!
   listAplicacionesHerbicidas: [AplicacionesHerbicida!]!
 }
@@ -90,6 +89,7 @@ type AplicacionesHerbicida {
   id_aplicaciones_herbicidas: Int!
   corte_id: Int!
   aphe_id: Int!
+  suertes: String
   aplicacionHerbicida: AplicacionHerbicida!
   corte: Corte!
 }
@@ -257,6 +257,7 @@ type Query {
   obtenerTablonesYAplicacionesPlagas(id_corte: Int!): [Tablon!]!
   obtenerTotalHectareasSuertes: Tablon!
   obtenerLabores: [Labores!]!
+  obtenerLabor(labor_id: Int!): Labores!
   obtenerAplicacionesHerbicidas: [AplicacionHerbicida!]!
   obtenerAplicacionesLabores(corte_id: Int!): [AplicacionLabores!]!
   obtenerAplicacionesHerbicidasCorte(corte_id: Int!): [AplicacionesHerbicida!]!

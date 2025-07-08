@@ -18,6 +18,7 @@ export class AplicacionesHerbicidasService {
         let aplicacionesRegistradas: number[] = [];
         for (let index = 0; index < createAplicacionesHerbicidaInput.length; index++) {
             const aplicacionRegistered = await this.aplicacionesHerbicidasRepository.findOne({
+                attributes: ['id_aplicaciones_herbicidas', 'corte_id', 'aphe_id'],
                 where: {
                     corte_id: createAplicacionesHerbicidaInput[index].corte_id,
                     aphe_id: createAplicacionesHerbicidaInput[index].aphe_id
@@ -36,6 +37,17 @@ export class AplicacionesHerbicidasService {
         try {
             return await this.aplicacionesHerbicidasRepository.findAll({
                 order: [[{ model: AplicacionHerbicida, as: 'aplicacionHerbicida' }, 'fecha', 'DESC']],
+                attributes: [
+                    'id_aplicaciones_herbicidas',
+                    'corte_id',
+                    'aphe_id',
+                    [
+                        this.aplicacionesHerbicidasRepository.sequelize.literal(
+                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicaciones_herbicidas ah ON c.id_corte = ah.corte_id WHERE ah.aphe_id = aplicacionHerbicida.id_aphe)'
+                        ),
+                        'suertes'
+                    ]
+                ],
                 include: [
                     {
                         model: AplicacionHerbicida,

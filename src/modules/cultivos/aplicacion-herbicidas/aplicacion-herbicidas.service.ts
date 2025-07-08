@@ -31,17 +31,7 @@ export class AplicacionHerbicidasService {
         try {
             return await this.aplicacionHerbicidaRepository.findAll({
                 order: [['fecha', 'DESC']],
-                attributes: [
-                    'id_aphe',
-                    'fecha',
-                    'tipo',
-                    [
-                        this.aplicacionHerbicidaRepository.sequelize.literal(
-                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicaciones_herbicidas ahs ON c.id_corte = ahs.corte_id WHERE ahs.aphe_id = AplicacionHerbicida.id_aphe)'
-                        ),
-                        'suertes'
-                    ]
-                ],
+                attributes: ['id_aphe', 'fecha', 'tipo'],
                 include: [
                     {
                         model: TratamientoHerbicida

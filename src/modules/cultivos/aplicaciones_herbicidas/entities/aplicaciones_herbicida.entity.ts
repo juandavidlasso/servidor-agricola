@@ -25,6 +25,10 @@ export class AplicacionesHerbicida extends Model<AplicacionesHerbicida> {
     @ForeignKey(() => AplicacionHerbicida)
     aphe_id: number;
 
+    @Field(() => String, { nullable: true })
+    @Column({ allowNull: true, type: DataType.STRING })
+    suertes?: string;
+
     @Field(() => AplicacionHerbicida)
     @BelongsTo(() => AplicacionHerbicida)
     aplicacionHerbicida: AplicacionHerbicida;
