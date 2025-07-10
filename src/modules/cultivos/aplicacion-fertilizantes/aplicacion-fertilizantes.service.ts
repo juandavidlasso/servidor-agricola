@@ -4,7 +4,6 @@ import { UpdateAplicacionFertilizanteInput } from './dto/update-aplicacion-ferti
 import { InjectModel } from '@nestjs/sequelize';
 import { AplicacionFertilizante } from './entities/aplicacion-fertilizante.entity';
 import { TratamientoFertilizante } from '../tratamiento-fertilizantes/entities/tratamiento-fertilizante.entity';
-import { AplicacionesFertilizante } from '../aplicaciones-fertilizantes/entities/aplicaciones-fertilizante.entity';
 
 @Injectable()
 export class AplicacionFertilizantesService {
@@ -12,9 +11,7 @@ export class AplicacionFertilizantesService {
         @InjectModel(AplicacionFertilizante)
         private readonly aplicacionFertilizanteRepository: typeof AplicacionFertilizante,
         @InjectModel(TratamientoFertilizante)
-        private readonly tratamientosFertilizantes: typeof TratamientoFertilizante,
-        @InjectModel(AplicacionesFertilizante)
-        private readonly aplicacionesFertilizanteRepository: typeof AplicacionesFertilizante
+        private readonly tratamientosFertilizantes: typeof TratamientoFertilizante
     ) {}
 
     async agregarAplicacionFertilizanteService(
@@ -93,21 +90,6 @@ export class AplicacionFertilizantesService {
             }
 
             return await aplicacionHerbicida.update(updateAplicacionFertilizanteInput);
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
-
-    async eliminarAplicacionFertilizanteService(id_apfe: number): Promise<boolean> {
-        let successOperation: boolean = false;
-        try {
-            await this.aplicacionesFertilizanteRepository.destroy({ where: { apfe_id: id_apfe } });
-            return await this.aplicacionFertilizanteRepository.destroy({ where: { id_apfe } }).then((rows) => {
-                if (rows === 1) {
-                    successOperation = true;
-                }
-                return successOperation;
-            });
         } catch (error) {
             throw new Error(error);
         }

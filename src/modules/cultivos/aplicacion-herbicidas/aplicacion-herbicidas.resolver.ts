@@ -29,9 +29,4 @@ export class AplicacionHerbicidasResolver {
             updateAplicacionHerbicidaInput
         );
     }
-
-    @Mutation(() => Boolean, { name: 'eliminarAplicacionHerbicida' })
-    async eliminarAplicacionHerbicida(@Args('id_aphe') id_aphe: number): Promise<boolean> {
-        return this.aplicacionHerbicidasService.eliminarAplicacionHerbicidaService(id_aphe);
-    }
 }

@@ -18,11 +18,6 @@ export class LaboresResolver {
         return await this.laboresService.obtenerLaboresService();
     }
 
-    @Query(() => Labores, { name: 'obtenerLabor' })
-    async obtenerLabor(@Args('labor_id', { type: () => Int }) labor_id: number): Promise<Labores> {
-        return await this.laboresService.obtenerLaborService(labor_id);
-    }
-
     @Mutation(() => Labores, { name: 'actualizarLabor' })
     async actualizarLabor(@Args('updateLaboresInput') updateLaboresInput: UpdateLaboresInput): Promise<Labores> {
         return await this.laboresService.actualizarLaborService(updateLaboresInput.id_labor, updateLaboresInput);

@@ -4,7 +4,6 @@ import { CreateAplicacionHerbicidaInput } from './dto/create-aplicacion-herbicid
 import { UpdateAplicacionHerbicidaInput } from './dto/update-aplicacion-herbicida.input';
 import { AplicacionHerbicida } from './entities/aplicacion-herbicida.entity';
 import { TratamientoHerbicida } from '../tratamiento-herbicidas/entities/tratamiento-herbicida.entity';
-import { AplicacionesHerbicida } from '../aplicaciones_herbicidas/entities/aplicaciones_herbicida.entity';
 
 @Injectable()
 export class AplicacionHerbicidasService {
@@ -12,9 +11,7 @@ export class AplicacionHerbicidasService {
         @InjectModel(AplicacionHerbicida)
         private readonly aplicacionHerbicidaRepository: typeof AplicacionHerbicida,
         @InjectModel(TratamientoHerbicida)
-        private readonly tratamientosHerbicidas: typeof TratamientoHerbicida,
-        @InjectModel(AplicacionesHerbicida)
-        private readonly aplicacionesHerbicidaRepository: typeof AplicacionesHerbicida
+        private readonly tratamientosHerbicidas: typeof TratamientoHerbicida
     ) {}
 
     async agregarAplicacionHerbicidaService(
@@ -83,21 +80,6 @@ export class AplicacionHerbicidasService {
             }
 
             return await aplicacionHerbicida.update(updateAplicacionHerbicidaInput);
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
-
-    async eliminarAplicacionHerbicidaService(id_aphe: number): Promise<boolean> {
-        let successOperation: boolean = false;
-        try {
-            await this.aplicacionesHerbicidaRepository.destroy({ where: { aphe_id: id_aphe } });
-            return await this.aplicacionHerbicidaRepository.destroy({ where: { id_aphe } }).then((rows) => {
-                if (rows === 1) {
-                    successOperation = true;
-                }
-                return successOperation;
-            });
         } catch (error) {
             throw new Error(error);
         }

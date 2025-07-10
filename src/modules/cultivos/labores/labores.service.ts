@@ -33,22 +33,12 @@ export class LaboresService {
         }
     }
 
-    async obtenerLaborService(labor_id: number): Promise<Labores> {
-        try {
-            return await this.laboresRepository.findOne({
-                attributes: ['id_labor', 'fecha', 'actividad', 'equipo', 'estado', 'pases', 'aplico', 'costo', 'nota'],
-                where: {
-                    id_labor: labor_id
-                }
-            });
-        } catch (error) {
-            throw new Error(error);
-        }
-    }
-
     async actualizarLaborService(id_labor: number, updateLaboreInput: UpdateLaboresInput): Promise<Labores> {
         try {
-            const labor = await this.laboresRepository.findOne({ where: { id_labor } });
+            const labor = await this.laboresRepository.findOne({
+                attributes: ['id_labor', 'fecha', 'actividad', 'equipo', 'estado', 'pases', 'aplico', 'costo', 'nota'],
+                where: { id_labor }
+            });
 
             if (!labor) throw new Error('La labor no esta registrada.');
 
