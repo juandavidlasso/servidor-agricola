@@ -119,6 +119,7 @@ type AplicacionesFertilizante {
   id_aplicaciones_fertilizantes: Int!
   corte_id: Int!
   apfe_id: Int!
+  suertes: String
   aplicacionFertilizante: AplicacionFertilizante!
   corte: Corte!
 }

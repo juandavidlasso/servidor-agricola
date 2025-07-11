@@ -35,6 +35,18 @@ export class AplicacionesFertilizantesService {
     async obtenerAplicacionesFertilizantesCorteService(corte_id: number): Promise<AplicacionesFertilizante[]> {
         try {
             return await this.aplicacionesFertilizantesRepository.findAll({
+                order: [[{ model: AplicacionFertilizante, as: 'aplicacionFertilizante' }, 'fecha', 'DESC']],
+                attributes: [
+                    'id_aplicaciones_fertilizantes',
+                    'corte_id',
+                    'apfe_id',
+                    [
+                        this.aplicacionesFertilizantesRepository.sequelize.literal(
+                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicaciones_fertilizantes af ON c.id_corte = af.corte_id WHERE af.apfe_id = aplicacionFertilizante.id_apfe)'
+                        ),
+                        'suertes'
+                    ]
+                ],
                 include: [
                     {
                         model: AplicacionFertilizante,

@@ -25,6 +25,10 @@ export class AplicacionesFertilizante extends Model<AplicacionesFertilizante> {
     @ForeignKey(() => AplicacionFertilizante)
     apfe_id: number;
 
+    @Field(() => String, { nullable: true })
+    @Column({ allowNull: true, type: DataType.STRING })
+    suertes?: string;
+
     @Field(() => AplicacionFertilizante)
     @BelongsTo(() => AplicacionFertilizante)
     aplicacionFertilizante: AplicacionFertilizante;
