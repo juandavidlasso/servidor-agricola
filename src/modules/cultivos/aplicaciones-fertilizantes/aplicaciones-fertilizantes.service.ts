@@ -18,6 +18,7 @@ export class AplicacionesFertilizantesService {
         let aplicacionesRegistradas: number[] = [];
         for (let index = 0; index < createAplicacionesFertilizanteInput.length; index++) {
             const aplicacionRegistered = await this.aplicacionesFertilizantesRepository.findOne({
+                attributes: ['id_aplicaciones_fertilizantes', 'corte_id', 'apfe_id'],
                 where: {
                     corte_id: createAplicacionesFertilizanteInput[index].corte_id,
                     apfe_id: createAplicacionesFertilizanteInput[index].apfe_id

@@ -81,6 +81,7 @@ type AplicacionHerbicida {
   id_aphe: Int!
   fecha: String!
   tipo: String!
+  suertes: String
   listTratamientoHerbicida: [TratamientoHerbicida!]!
   listAplicacionesHerbicidas: [AplicacionesHerbicida!]!
 }

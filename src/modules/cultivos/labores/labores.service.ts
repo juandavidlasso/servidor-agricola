@@ -26,7 +26,23 @@ export class LaboresService {
         try {
             return await this.laboresRepository.findAll({
                 order: [['fecha', 'DESC']],
-                attributes: ['id_labor', 'fecha', 'actividad', 'equipo', 'estado', 'pases', 'aplico', 'costo', 'nota']
+                attributes: [
+                    'id_labor',
+                    'fecha',
+                    'actividad',
+                    'equipo',
+                    'estado',
+                    'pases',
+                    'aplico',
+                    'costo',
+                    'nota',
+                    [
+                        this.laboresRepository.sequelize.literal(
+                            '(SELECT GROUP_CONCAT(IFNULL(s.nombre, "") SEPARATOR "-") FROM suertes s INNER JOIN cortes c ON s.id_suerte = c.suerte_id INNER JOIN aplicacion_labores al ON c.id_corte = al.corte_id INNER JOIN labores l ON al.labor_id = l.id_labor WHERE l.id_labor = Labores.id_labor)'
+                        ),
+                        'suertes'
+                    ]
+                ]
             });
         } catch (error) {
             throw new Error(error);
