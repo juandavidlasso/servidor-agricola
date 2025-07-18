@@ -11,7 +11,7 @@ export class AplicacionFertilizantesService {
         @InjectModel(AplicacionFertilizante)
         private readonly aplicacionFertilizanteRepository: typeof AplicacionFertilizante,
         @InjectModel(TratamientoFertilizante)
-        private readonly tratamientosFertilizantes: typeof TratamientoFertilizante
+        private readonly tratamientoFertilizanteRepository: typeof TratamientoFertilizante
     ) {}
 
     async agregarAplicacionFertilizanteService(
@@ -68,14 +68,14 @@ export class AplicacionFertilizantesService {
                     tipo: updateAplicacionFertilizanteInput.tipo
                 });
 
-                const tratamientos = await this.tratamientosFertilizantes.findAll({
+                const tratamientos = await this.tratamientoFertilizanteRepository.findAll({
                     where: {
                         apfe_id: updateAplicacionFertilizanteInput.id_apfe
                     }
                 });
                 if (tratamientos.length > 0) {
                     for (let index = 0; index < tratamientos.length; index++) {
-                        await this.tratamientosFertilizantes.create({
+                        await this.tratamientoFertilizanteRepository.create({
                             producto: tratamientos[index].producto,
                             dosis: tratamientos[index].dosis,
                             presentacion: tratamientos[index].presentacion,

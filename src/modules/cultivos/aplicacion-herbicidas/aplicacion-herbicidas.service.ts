@@ -11,7 +11,7 @@ export class AplicacionHerbicidasService {
         @InjectModel(AplicacionHerbicida)
         private readonly aplicacionHerbicidaRepository: typeof AplicacionHerbicida,
         @InjectModel(TratamientoHerbicida)
-        private readonly tratamientosHerbicidas: typeof TratamientoHerbicida
+        private readonly tratamientoHerbicidaRepository: typeof TratamientoHerbicida
     ) {}
 
     async agregarAplicacionHerbicidaService(
@@ -68,14 +68,14 @@ export class AplicacionHerbicidasService {
                     tipo: updateAplicacionHerbicidaInput.tipo
                 });
 
-                const tratamientos = await this.tratamientosHerbicidas.findAll({
+                const tratamientos = await this.tratamientoHerbicidaRepository.findAll({
                     where: {
                         aphe_id: updateAplicacionHerbicidaInput.id_aphe
                     }
                 });
                 if (tratamientos.length > 0) {
                     for (let index = 0; index < tratamientos.length; index++) {
-                        await this.tratamientosHerbicidas.create({
+                        await this.tratamientoHerbicidaRepository.create({
                             producto: tratamientos[index].producto,
                             dosis: tratamientos[index].dosis,
                             presentacion: tratamientos[index].presentacion,
