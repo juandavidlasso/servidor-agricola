@@ -1,4 +1,4 @@
-import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { AplicacionHerbicidasService } from './aplicacion-herbicidas.service';
 import { CreateAplicacionHerbicidaInput } from './dto/create-aplicacion-herbicida.input';
 import { UpdateAplicacionHerbicidaInput } from './dto/update-aplicacion-herbicida.input';
@@ -28,5 +28,10 @@ export class AplicacionHerbicidasResolver {
             updateAplicacionHerbicidaInput.id_aphe,
             updateAplicacionHerbicidaInput
         );
+    }
+
+    @Mutation(() => Boolean, { name: 'eliminarAplicacionHerbicida' })
+    async eliminarAplicacionHerbicida(@Args('id_aphe', { type: () => Int, name: 'id_aphe' }) id_aphe: number): Promise<boolean> {
+        return this.aplicacionHerbicidasService.eliminarAplicacionHerbicidaService(id_aphe);
     }
 }

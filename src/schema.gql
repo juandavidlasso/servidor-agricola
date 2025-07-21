@@ -307,6 +307,7 @@ type Mutation {
   eliminarLabor(id_labor: Int!): Boolean!
   agregarAplicacionHerbicida(createAplicacionHerbicidaInput: CreateAplicacionHerbicidaInput!): AplicacionHerbicida!
   actualizarAplicacionHerbicida(updateAplicacionHerbicidaInput: UpdateAplicacionHerbicidaInput!): AplicacionHerbicida!
+  eliminarAplicacionHerbicida(id_aphe: Int!): Boolean!
   agregarTratamientoHerbicida(createTratamientoHerbicidaInput: CreateTratamientoHerbicidaInput!): TratamientoHerbicida!
   actualizarTratamientoHerbicida(updateTratamientoHerbicidaInput: UpdateTratamientoHerbicidaInput!): TratamientoHerbicida!
   eliminarTratamientoHerbicida(id_trahe: Int!): Boolean!
@@ -316,6 +317,7 @@ type Mutation {
   eliminarAplicacionesHerbicidas(id_aplicaciones_herbicidas: Int!): Boolean!
   agregarAplicacionFertilizante(createAplicacionFertilizanteInput: CreateAplicacionFertilizanteInput!): AplicacionFertilizante!
   actualizarAplicacionFertilizante(updateAplicacionFertilizanteInput: UpdateAplicacionFertilizanteInput!): AplicacionFertilizante!
+  eliminarAplicacionFertilizante(id_apfe: Int!): Boolean!
   agregarTratamientoFertilizante(createTratamientoFertilizanteInput: CreateTratamientoFertilizanteInput!): TratamientoFertilizante!
   actualizarTratamientoFertilizante(updateTratamientoFertilizanteInput: UpdateTratamientoFertilizanteInput!): TratamientoFertilizante!
   eliminarTratamientoFertilizante(id_trafe: Int!): Boolean!

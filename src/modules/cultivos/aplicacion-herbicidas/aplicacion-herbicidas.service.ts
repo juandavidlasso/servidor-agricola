@@ -94,4 +94,18 @@ export class AplicacionHerbicidasService {
             throw new Error(error);
         }
     }
+
+    async eliminarAplicacionHerbicidaService(id_aphe: number): Promise<boolean> {
+        let successOperation: boolean = false;
+        try {
+            return await this.aplicacionHerbicidaRepository.destroy({ where: { id_aphe } }).then((rows) => {
+                if (rows === 1) {
+                    successOperation = true;
+                }
+                return successOperation;
+            });
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 }

@@ -94,4 +94,18 @@ export class AplicacionFertilizantesService {
             throw new Error(error);
         }
     }
+
+    async eliminarAplicacionFertilizanteService(id_apfe: number): Promise<boolean> {
+        let successOperation: boolean = false;
+        try {
+            return await this.aplicacionFertilizanteRepository.destroy({ where: { id_apfe } }).then((rows) => {
+                if (rows === 1) {
+                    successOperation = true;
+                }
+                return successOperation;
+            });
+        } catch (error) {
+            throw new Error(error);
+        }
+    }
 }
