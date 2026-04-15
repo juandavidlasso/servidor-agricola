@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateAplicacionesHerbicidaInput } from './dto/create-aplicaciones_herbicida.input';
 import { AplicacionesHerbicida } from './entities/aplicaciones_herbicida.entity';
@@ -64,7 +64,7 @@ export class AplicacionesHerbicidasService {
                 where: { corte_id }
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -78,7 +78,7 @@ export class AplicacionesHerbicidasService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

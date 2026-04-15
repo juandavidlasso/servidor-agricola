@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAplicacionPlagasInput } from './dto/create-aplicacion-plagas.input';
 import { UpdateAplicacionPlagasInput } from './dto/update-aplicacion-plagas.input';
 import { AplicacionPlagas } from './entities/aplicacion-plagas.entity';
@@ -25,7 +25,7 @@ export class AplicacionPlagasService {
 
             return await this.aplicacionPlagasRepository.create(createAplicacionPlagasInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -40,7 +40,7 @@ export class AplicacionPlagasService {
 
             return await aplicacionPlaga.update(updateAplicacionPlagasInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -54,7 +54,7 @@ export class AplicacionPlagasService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

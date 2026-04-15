@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { QueryTypes } from 'sequelize';
 import { CreateLluviaInput } from './dto/create-lluvia.input';
 import { UpdateLluviaInput } from './dto/update-lluvia.input';
@@ -33,7 +33,7 @@ export class LluviasService {
             }
             return aplicacionesRegistradas;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -45,7 +45,7 @@ export class LluviasService {
 
             return await lluvia.update(updateLluviaInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -59,7 +59,7 @@ export class LluviasService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -69,7 +69,7 @@ export class LluviasService {
                 order: [['fecha', 'DESC']]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -85,7 +85,7 @@ export class LluviasService {
                 }
             );
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

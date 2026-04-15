@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAplicacionRiegoInput } from './dto/create-aplicacion-riego.input';
 import { AplicacionRiego } from './entities/aplicacion-riego.entity';
 
@@ -21,7 +21,7 @@ export class AplicacionRiegosService {
             }
             return aplicacionesRegistradas;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -37,7 +37,7 @@ export class AplicacionRiegosService {
             }
             return aplicacionesEliminadas;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

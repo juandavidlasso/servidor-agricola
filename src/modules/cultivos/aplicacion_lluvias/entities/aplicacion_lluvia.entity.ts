@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { Lluvia } from 'src/modules/lluvias/entities/lluvia.entity';
-import { Pluviometro } from 'src/modules/pluviometros/entities/pluviometro.entity';
+import { Lluvia } from '@modules/lluvias/entities/lluvia.entity';
+import { Pluviometro } from '@modules/pluviometros/entities/pluviometro.entity';
 
 @ObjectType()
 @Table({

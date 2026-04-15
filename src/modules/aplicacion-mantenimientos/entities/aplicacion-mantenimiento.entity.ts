@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Column, DataType, ForeignKey, HasMany, Model, Table } from 'sequelize-typescript';
-import { Mantenimiento } from 'src/modules/mantenimientos/entities/mantenimiento.entity';
-import { Maquinaria } from 'src/modules/maquinaria/entities/maquinaria.entity';
+import { Maquinaria } from '@modules/maquinaria/entities/maquinaria.entity';
+import { Mantenimiento } from '@modules/mantenimientos/entities/mantenimiento.entity';
 
 @ObjectType()
 @Table({

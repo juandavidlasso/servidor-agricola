@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateMaquinariaInput } from './dto/create-maquinaria.input';
 import { UpdateMaquinariaInput } from './dto/update-maquinaria.input';
@@ -15,7 +15,7 @@ export class MaquinariaService {
         try {
             return await this.maquinariaRepository.create(createMaquinariaInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -23,7 +23,7 @@ export class MaquinariaService {
         try {
             return await this.maquinariaRepository.findAll();
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -35,7 +35,7 @@ export class MaquinariaService {
 
             return await maquinaria.update(updateMaquinariaInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

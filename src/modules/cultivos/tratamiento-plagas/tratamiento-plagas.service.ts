@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateTratamientoPlagasInput } from './dto/create-tratamiento-plagas.input';
 import { UpdateTratamientoPlagasInput } from './dto/update-tratamiento-plagas.input';
@@ -17,7 +17,7 @@ export class TratamientoPlagasService {
         try {
             return await this.tratamientoPlagasRepository.create(createTratamientoPlagasInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -27,7 +27,7 @@ export class TratamientoPlagasService {
                 order: [['producto', 'DESC']]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -42,7 +42,7 @@ export class TratamientoPlagasService {
 
             return await tratamientoPlaga.update(updateTratamientoPlagasInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -56,7 +56,7 @@ export class TratamientoPlagasService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

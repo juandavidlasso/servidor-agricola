@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Op } from 'sequelize';
 import { CreatePluviometroInput, FilterLluviasInput } from './dto/create-pluviometro.input';
 import { Pluviometro } from './entities/pluviometro.entity';
@@ -17,7 +17,7 @@ export class PluviometrosService {
         try {
             return await this.pluviometroRepository.create(createPluviometroInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -72,7 +72,7 @@ export class PluviometrosService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -121,7 +121,7 @@ export class PluviometrosService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

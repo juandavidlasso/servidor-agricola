@@ -36,11 +36,11 @@ export class Suerte extends Model<Suerte> {
 
     @Field(() => String, { nullable: true })
     @Column({ allowNull: false, type: DataType.DATEONLY, defaultValue: DataType.NOW })
-    createdAt?: string;
+    declare createdAt?: string;
 
     @Field(() => String, { nullable: true })
     @Column({ allowNull: false, type: DataType.DATEONLY, defaultValue: DataType.NOW })
-    updatedAt?: string;
+    declare updatedAt?: string;
 
     @Field(() => [Corte])
     @HasMany(() => Corte)

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import * as bcryptjs from 'bcryptjs';
 import { CreateUsuarioInput } from './dto/create-usuario.input';
@@ -20,7 +20,7 @@ export class UsuariosService {
                 password: bcryptjs.hashSync(createUsuarioInput.password, 10)
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -33,7 +33,7 @@ export class UsuariosService {
 
             return users;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -46,7 +46,7 @@ export class UsuariosService {
 
             return user.dataValues;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -59,7 +59,7 @@ export class UsuariosService {
 
             return user.dataValues;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -76,7 +76,7 @@ export class UsuariosService {
 
             return await user.update(updateUsuarioInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAplicacionFertilizanteInput } from './dto/create-aplicacion-fertilizante.input';
 import { UpdateAplicacionFertilizanteInput } from './dto/update-aplicacion-fertilizante.input';
 import { InjectModel } from '@nestjs/sequelize';
@@ -20,7 +20,7 @@ export class AplicacionFertilizantesService {
         try {
             return await this.aplicacionFertilizanteRepository.create(createAplicacionFertilizanteInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -46,7 +46,7 @@ export class AplicacionFertilizantesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -91,7 +91,7 @@ export class AplicacionFertilizantesService {
 
             return await aplicacionHerbicida.update(updateAplicacionFertilizanteInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -105,7 +105,7 @@ export class AplicacionFertilizantesService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

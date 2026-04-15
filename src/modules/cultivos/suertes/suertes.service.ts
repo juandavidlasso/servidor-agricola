@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateSuerteInput, ProntuarioInput } from './dto/create-suerte.input';
 import { UpdateSuerteInput } from './dto/update-suerte.input';
 import { Suerte } from './entities/suerte.entity';
@@ -28,7 +28,7 @@ export class SuertesService {
 
             return await this.suerteRepository.create(createSuerteInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -94,7 +94,7 @@ export class SuertesService {
                     }
                 });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -105,7 +105,7 @@ export class SuertesService {
                 { type: QueryTypes.SELECT }
             );
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -117,7 +117,7 @@ export class SuertesService {
 
             return suerte;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -129,7 +129,7 @@ export class SuertesService {
 
             return await suerte.update(updateSuerteInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -151,7 +151,7 @@ export class SuertesService {
                     return successOperation;
                 });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -187,7 +187,7 @@ export class SuertesService {
                 return result.totalArea.toFixed(2);
             }
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -209,7 +209,7 @@ export class SuertesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -238,7 +238,7 @@ export class SuertesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -358,7 +358,7 @@ export class SuertesService {
                 });
             }
         } catch (error) {
-            return error;
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -463,7 +463,7 @@ export class SuertesService {
                 });
             }
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

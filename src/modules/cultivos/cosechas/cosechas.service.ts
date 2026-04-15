@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateCosechaInput } from './dto/create-cosecha.input';
 import { UpdateCosechaInput } from './dto/update-cosecha.input';
@@ -19,7 +19,7 @@ export class CosechasService {
         try {
             return await this.cosechaRepository.create(createCosechaInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -49,7 +49,7 @@ export class CosechasService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -61,7 +61,7 @@ export class CosechasService {
 
             return await cosecha.update(updateCosechaInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

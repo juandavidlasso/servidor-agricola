@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { QueryTypes } from 'sequelize';
 import { CreateAplicacionLluviaInput } from './dto/create-aplicacion_lluvia.input';
@@ -13,7 +13,7 @@ export class AplicacionLluviasService {
         try {
             return await this.aplicacionLluviaRepository.create(createAplicacionLluviaInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -27,7 +27,7 @@ export class AplicacionLluviasService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -43,7 +43,7 @@ export class AplicacionLluviasService {
                 }
             );
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

@@ -1,7 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { BelongsTo, Column, DataType, ForeignKey, Model, Table } from 'sequelize-typescript';
-import { AplicacionMantenimiento } from 'src/modules/aplicacion-mantenimientos/entities/aplicacion-mantenimiento.entity';
-import { Insumo } from 'src/modules/insumos/entities/insumo.entity';
+import { AplicacionMantenimiento } from '@modules/aplicacion-mantenimientos/entities/aplicacion-mantenimiento.entity';
+import { Insumo } from '@modules/insumos/entities/insumo.entity';
 
 @ObjectType()
 @Table({

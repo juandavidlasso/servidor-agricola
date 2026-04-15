@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateAplicacionLaboresInput } from './dto/create-aplicacion-labores.input';
 import { InjectModel } from '@nestjs/sequelize';
 import { AplicacionLabores } from './entities/aplicacion-labores.entity';
@@ -31,7 +31,7 @@ export class AplicacionLaboresService {
             }
             return aplicacionesRegistradas;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -64,7 +64,7 @@ export class AplicacionLaboresService {
                 where: { corte_id: id }
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -78,7 +78,7 @@ export class AplicacionLaboresService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

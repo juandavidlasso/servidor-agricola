@@ -1,6 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Column, DataType, HasMany, Model, Table } from 'sequelize-typescript';
-import { AplicacionLluvia } from 'src/modules/cultivos/aplicacion_lluvias/entities/aplicacion_lluvia.entity';
+import { AplicacionLluvia } from '@modules/cultivos/aplicacion_lluvias/entities/aplicacion_lluvia.entity';
 
 @ObjectType()
 @Table({

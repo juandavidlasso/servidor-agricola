@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateInsumoInput } from './dto/create-insumo.input';
 import { UpdateInsumoInput } from './dto/update-insumo.input';
@@ -15,15 +15,19 @@ export class InsumosService {
         try {
             return await this.insumoRepository.create(createInsumoInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
     async obtenerInsumosService(): Promise<Insumo[]> {
         try {
-            return await this.insumoRepository.findAll();
+            return await this.insumoRepository.findAll({
+                order: [
+                    ['nombre','ASC']
+                ]
+            });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -35,7 +39,7 @@ export class InsumosService {
 
             return await insumo.update(updateInsumoInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -49,7 +53,7 @@ export class InsumosService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

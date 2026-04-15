@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateCorteInput } from './dto/create-corte.input';
 import { UpdateCorteInput } from './dto/update-corte.input';
 import { Corte } from './entities/corte.entity';
@@ -16,7 +16,7 @@ export class CortesService {
         try {
             return await this.corteRepository.create(createCorteInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -46,7 +46,7 @@ export class CortesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -54,7 +54,7 @@ export class CortesService {
         try {
             return await this.corteRepository.count({ where: { suerte_id: id_suerte } });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -66,7 +66,7 @@ export class CortesService {
 
             return corte;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -78,7 +78,7 @@ export class CortesService {
 
             return await corte.update(updateCorteInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -97,7 +97,7 @@ export class CortesService {
             if (!corteActual) throw new Error('No hay corte actual.');
             return corteActual;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateRiegoInput } from './dto/create-riego.input';
 import { UpdateRiegoInput } from './dto/update-riego.input';
 import { Riego } from './entities/riego.entity';
@@ -16,7 +16,7 @@ export class RiegosService {
         try {
             return await this.riegoRepository.create(createRiegoInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -33,7 +33,7 @@ export class RiegosService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -45,7 +45,7 @@ export class RiegosService {
 
             return await riego.update(updateRiegoInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -59,7 +59,7 @@ export class RiegosService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -71,7 +71,7 @@ export class RiegosService {
             if (!numRiegos) return 0;
             return numRiegos as number;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

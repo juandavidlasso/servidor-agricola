@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateAplicacionesFertilizanteInput } from './dto/create-aplicaciones-fertilizante.input';
 import { AplicacionesFertilizante } from './entities/aplicaciones-fertilizante.entity';
@@ -64,7 +64,7 @@ export class AplicacionesFertilizantesService {
                 where: { corte_id }
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -80,7 +80,7 @@ export class AplicacionesFertilizantesService {
                     return successOperation;
                 });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

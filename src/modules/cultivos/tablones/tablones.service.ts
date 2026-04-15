@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateTabloneInput } from './dto/create-tablon.input';
 import { UpdateTablonInput } from './dto/update-tablon.input';
@@ -30,7 +30,7 @@ export class TablonesService {
             }
             return tablonesRegistrados;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -38,7 +38,7 @@ export class TablonesService {
         try {
             return await this.tablonRepository.findAll({ where: { corte_id: id_corte }, order: [['numero', 'ASC']] });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -50,7 +50,7 @@ export class TablonesService {
 
             return await tablon.update(updateTablonInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -64,7 +64,7 @@ export class TablonesService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -95,7 +95,7 @@ export class TablonesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -117,7 +117,7 @@ export class TablonesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -144,7 +144,7 @@ export class TablonesService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

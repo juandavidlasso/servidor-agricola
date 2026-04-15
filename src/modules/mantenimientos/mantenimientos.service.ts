@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateMantenimientoInput } from './dto/create-mantenimiento.input';
 import { UpdateMantenimientoInput } from './dto/update-mantenimiento.input';
@@ -20,7 +20,7 @@ export class MantenimientosService {
             }
             return mantenimientosRegistrados;
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -35,7 +35,7 @@ export class MantenimientosService {
 
             return await mantenimiento.update(updateMantenimientoInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -49,7 +49,7 @@ export class MantenimientosService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }

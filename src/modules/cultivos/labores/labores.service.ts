@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/sequelize';
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { CreateLaboresInput } from './dto/create-labores.input';
 import { UpdateLaboresInput } from './dto/update-labores.input';
 import { Labores } from './entities/labores.entity';
@@ -18,7 +18,7 @@ export class LaboresService {
         try {
             return await this.laboresRepository.create(createLaboresInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -45,7 +45,7 @@ export class LaboresService {
                 ]
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -60,7 +60,7 @@ export class LaboresService {
 
             return await labor.update(updateLaboreInput);
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 
@@ -75,7 +75,7 @@ export class LaboresService {
                 return successOperation;
             });
         } catch (error) {
-            throw new Error(error);
+            throw new InternalServerErrorException(error);
         }
     }
 }
