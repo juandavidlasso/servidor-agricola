@@ -240,6 +240,13 @@ type AplicacionMantenimiento {
   listMantenimientos: [Mantenimiento!]!
 }
 
+type Note {
+  id_note: Int!
+  date: String!
+  description: String!
+  cost: Int
+}
+
 type Query {
   obtenerUsuarios: [Usuarios!]!
   obtenerUsuario(id_usuario: Int!): Usuarios!
@@ -276,6 +283,7 @@ type Query {
   obtenerMaquinarias: [Maquinaria!]!
   obtenerInsumos: [Insumo!]!
   obtenerAplicacionesMantenimiento(maquinariaId: Int!): [AplicacionMantenimiento!]!
+  obtenerNotas: [Note!]!
 }
 
 input ProntuarioInput {
@@ -353,6 +361,9 @@ type Mutation {
   agregarMantenimiento(createMantenimientoInput: [CreateMantenimientoInput!]!): [Float!]!
   actualizarMantenimiento(updateMantenimientoInput: UpdateMantenimientoInput!): Mantenimiento!
   eliminarMantenimiento(idMantenimiento: Int!): Boolean!
+  agregarNota(createNoteInput: CreateNoteInput!): Note!
+  actualizarNota(updateNoteInput: UpdateNoteInput!): Note!
+  eliminarNota(id_note: Int!): Boolean!
 }
 
 input CreateUsuarioInput {
@@ -693,4 +704,17 @@ input UpdateMantenimientoInput {
   insumoId: Int
   ApMantId: Int
   idMantenimiento: Int!
+}
+
+input CreateNoteInput {
+  date: String!
+  description: String!
+  cost: Int
+}
+
+input UpdateNoteInput {
+  date: String
+  description: String
+  cost: Int
+  id_note: Int!
 }

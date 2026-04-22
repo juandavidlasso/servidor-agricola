@@ -56,6 +56,8 @@ import { AplicacionMantenimientosModule } from './modules/aplicacion-mantenimien
 import { Mantenimiento } from './modules/mantenimientos/entities/mantenimiento.entity';
 import { MantenimientosModule } from './modules/mantenimientos/mantenimientos.module';
 import { AppController } from './app.controller';
+import { Note } from '@modules/notes/entities/note.entity';
+import { NotesModule } from '@modules/notes/notes.module';
 config();
 
 @Module({
@@ -108,7 +110,8 @@ config();
                 Maquinaria,
                 Insumo,
                 AplicacionMantenimiento,
-                Mantenimiento
+                Mantenimiento,
+                Note
             ]
         }),
 
@@ -160,7 +163,9 @@ config();
 
         AplicacionMantenimientosModule,
 
-        MantenimientosModule
+        MantenimientosModule,
+
+        NotesModule
     ],
     controllers: [AppController],
     providers: []
