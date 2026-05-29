@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { HttpException, Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { CreateCosechaInput } from './dto/create-cosecha.input';
 import { UpdateCosechaInput } from './dto/update-cosecha.input';
@@ -23,15 +23,15 @@ export class CosechasService {
         }
     }
 
-    async obtenerCosechaCorteService(id_corte: number): Promise<Cosecha> {
+    async obtenerCosechaCorteService(id_corte: number): Promise<Cosecha | null> {
         try {
             const cosecha = await this.cosechaRepository.findOne({ where: { corte_id: id_corte } });
 
-            if (!cosecha) throw new Error('No hay cosecha registrada');
+            if (!cosecha) return null;
 
             const tablones = await this.tablonRepository.count({ where: { corte_id: id_corte } });
 
-            if (tablones === 0) throw new Error('No hay tablones registrados');
+            if (tablones === 0) return null;
 
             return await this.cosechaRepository.findOne({
                 where: { corte_id: id_corte },

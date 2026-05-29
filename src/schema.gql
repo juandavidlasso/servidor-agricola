@@ -278,7 +278,7 @@ type Query {
   obtenerTratamientoPlagas: [TratamientoPlagas!]!
   obtenerRiegosCorte(corte_id: Int!): [Riego!]!
   obtenerRiegosMayor(corte_id: Int!): Float!
-  obtenerCosechaCorte(id_corte: Int!): Cosecha!
+  obtenerCosechaCorte(id_corte: Int!): Cosecha
   obtenerResumenLluviasYear(year: Int!): [AplicacionLluvia!]!
   obtenerMaquinarias: [Maquinaria!]!
   obtenerInsumos: [Insumo!]!
