@@ -40,7 +40,7 @@ export class TablonesResolver {
         return await this.tablonesService.obtenerTablonesYAplicacionesPlagasService(id_corte);
     }
 
-    @Query(() => Tablon, { name: 'obtenerTotalHectareasSuertes' })
+    @Query(() => Tablon, { name: 'obtenerTotalHectareasSuertes', nullable: true })
     async obtenerTotalHectareasSuertes(): Promise<Tablon> {
         return await this.tablonesService.obtenerTotalHectareasSuertesService();
     }

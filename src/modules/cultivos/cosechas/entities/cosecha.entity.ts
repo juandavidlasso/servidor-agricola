@@ -34,12 +34,16 @@ export class Cosecha extends Model<Cosecha> {
     @Column({ allowNull: true, type: DataType.STRING })
     nota?: string;
 
+    @Field(() => String, { nullable: true })
+    @Column({ allowNull: true, type: DataType.STRING })
+    numeroSuerte?: string;
+
     @Field(() => Int, { nullable: false })
     @ForeignKey(() => Corte)
     @Column({ allowNull: false, type: DataType.INTEGER })
     corte_id: number;
 
-    @BelongsTo(() => Corte)
+    @BelongsTo(() => Corte, { foreignKey: 'corte_id' })
     @Field(() => Corte)
     cortePadre: Corte;
 }

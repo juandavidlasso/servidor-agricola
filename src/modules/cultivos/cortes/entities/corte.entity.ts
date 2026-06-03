@@ -53,23 +53,45 @@ export class Corte extends Model<Corte> {
     suerte_id: number;
 
     @Field(() => Suerte)
-    @BelongsTo(() => Suerte)
+    @BelongsTo(() => Suerte, {
+        foreignKey: 'suerte_id'
+    })
     suertePadre: Suerte;
 
     @Field(() => [Tablon])
-    @HasMany(() => Tablon)
+    @HasMany(() => Tablon, {
+        foreignKey: 'corte_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     listTablones: Tablon[];
 
-    @HasMany(() => AplicacionLabores)
+    @HasMany(() => AplicacionLabores, {
+        foreignKey: 'corte_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     listAplicacionLabores: AplicacionLabores[];
 
-    @HasMany(() => AplicacionesHerbicida)
+    @HasMany(() => AplicacionesHerbicida, {
+        foreignKey: 'corte_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     listAplicacionesHerbicidas: AplicacionesHerbicida[];
 
-    @HasMany(() => AplicacionesFertilizante)
+    @HasMany(() => AplicacionesFertilizante, {
+        foreignKey: 'corte_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     listAplicacionesFertilizantes: AplicacionesFertilizante[];
 
     @Field(() => Cosecha)
-    @HasMany(() => Cosecha)
+    @HasMany(() => Cosecha, {
+        foreignKey: 'corte_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     listCosechas: Cosecha[];
 }

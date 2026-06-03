@@ -32,10 +32,16 @@ export class Tablon extends Model<Tablon> {
     @Column({ allowNull: false, type: DataType.INTEGER })
     corte_id: number;
 
-    @BelongsTo(() => Corte)
+    @BelongsTo(() => Corte, {
+        foreignKey: 'corte_id'
+    })
     cortePapa: Corte;
 
-    @HasMany(() => AplicacionPlagas)
+    @HasMany(() => AplicacionPlagas, {
+        foreignKey: 'tablon_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     @Field(() => [AplicacionPlagas])
     listAplicacionesPlagas: AplicacionPlagas[];
 }

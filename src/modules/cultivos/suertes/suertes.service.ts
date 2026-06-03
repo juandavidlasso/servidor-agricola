@@ -244,226 +244,405 @@ export class SuertesService {
 
     async consultarProntuarioService(prontuarioInput: ProntuarioInput): Promise<Cosecha[]> {
         try {
-            if (prontuarioInput.nombre.trim() !== '') {
-                return await this.suerteRepository
-                    .count({
-                        where: {
-                            nombre: {
-                                [Op.in]: prontuarioInput.nombre.split(',')
-                            }
-                        }
-                    })
-                    .then(async (count) => {
-                        if (count != 0) {
-                            return await this.suerteRepository.sequelize
-                                .query(
-                                    'select count(*) as conteo from `cosechas` c INNER JOIN `cortes` o ON o.id_corte=c.corte_id INNER JOIN `suertes` s ON s.id_suerte=o.suerte_id where s.nombre IN(:nombr) and o.fecha_corte BETWEEN :inicia AND :fina',
-                                    {
-                                        replacements: {
-                                            nombr: prontuarioInput.nombre.split(','),
-                                            inicia: prontuarioInput.fecha_inicio,
-                                            fina: prontuarioInput.fecha_fin
-                                        },
-                                        type: QueryTypes.SELECT
-                                    }
-                                )
-                                .then(async (cuente: any) => {
-                                    if (cuente[0].conteo != 0) {
-                                        return await this.cosechaRepository.findAll({
-                                            order: [
-                                                [
-                                                    { model: Corte, as: 'cortePadre' },
-                                                    { model: Suerte, as: 'suertePadre' },
-                                                    this.suerteRepository.sequelize.literal('nombre + 0, nombre')
-                                                ]
-                                            ],
-                                            include: [
-                                                {
-                                                    model: Corte,
-                                                    required: true,
-                                                    // raw: true,
-                                                    attributes: {
-                                                        include: [
-                                                            [
-                                                                this.suerteRepository.sequelize.literal(
-                                                                    `(SELECT SUM(area) FROM tablones WHERE corte_id=id_corte)`
-                                                                ),
-                                                                'area'
-                                                            ]
-                                                        ]
-                                                    },
-                                                    where: {
-                                                        fecha_corte: {
-                                                            [Op.between]: [
-                                                                prontuarioInput.fecha_inicio,
-                                                                prontuarioInput.fecha_fin
-                                                            ]
-                                                        }
-                                                    },
-                                                    include: [
-                                                        {
-                                                            model: Suerte,
-                                                            required: true,
-                                                            where: {
-                                                                nombre: {
-                                                                    [Op.in]: prontuarioInput.nombre.split(',')
-                                                                }
-                                                            }
-                                                        }
-                                                    ]
-                                                }
-                                            ]
-                                        });
-                                    }
-                                });
-                        }
-                    });
-            } else {
-                return await this.cosechaRepository.findAll({
-                    order: [
-                        [
-                            { model: Corte, as: 'cortePadre' },
-                            { model: Suerte, as: 'suertePadre' },
-                            this.suerteRepository.sequelize.literal('nombre + 0, nombre')
-                        ]
-                    ],
-                    include: [
-                        {
-                            model: Corte,
-                            required: true,
-                            //   raw: true,
-                            attributes: {
-                                include: [
-                                    [
-                                        this.suerteRepository.sequelize.literal(
-                                            `(SELECT SUM(area) FROM tablones WHERE corte_id=id_corte)`
-                                        ),
-                                        'area'
-                                    ]
-                                ]
-                            },
-                            where: {
-                                fecha_corte: {
-                                    [Op.between]: [prontuarioInput.fecha_inicio, prontuarioInput.fecha_fin]
-                                }
-                            },
+            const nombres =
+                prontuarioInput.nombre?.trim() !== '' ? prontuarioInput.nombre.split(',').map((nombre) => nombre.trim()) : null;
+
+            return await this.cosechaRepository.findAll({
+                order: [
+                    this.cosechaRepository.sequelize.literal(`
+                    CASE
+                        WHEN \`cortePadre->suertePadre\`.\`nombre\` REGEXP '^[0-9]+$'
+                        THEN 1
+                        ELSE 0
+                    END
+                `),
+                    this.cosechaRepository.sequelize.literal(`
+                    CASE
+                        WHEN \`cortePadre->suertePadre\`.\`nombre\` REGEXP '^[0-9]+$'
+                        THEN CAST(\`cortePadre->suertePadre\`.\`nombre\` AS UNSIGNED)
+                    END
+                `),
+                    [{ model: Corte, as: 'cortePadre' }, { model: Suerte, as: 'suertePadre' }, 'nombre', 'ASC']
+                ],
+                include: [
+                    {
+                        model: Corte,
+                        as: 'cortePadre',
+                        required: true,
+                        attributes: {
                             include: [
-                                {
-                                    model: Suerte,
-                                    required: true
-                                }
+                                [
+                                    this.cosechaRepository.sequelize.literal(`
+                                    (
+                                        SELECT COALESCE(SUM(t.area), 0)
+                                        FROM tablones t
+                                        WHERE t.corte_id = cortePadre.id_corte
+                                    )
+                                `),
+                                    'area'
+                                ]
                             ]
-                        }
-                    ]
-                });
-            }
+                        },
+                        where: {
+                            fecha_corte: {
+                                [Op.between]: [prontuarioInput.fecha_inicio, prontuarioInput.fecha_fin]
+                            }
+                        },
+                        include: [
+                            {
+                                model: Suerte,
+                                as: 'suertePadre',
+                                required: true,
+                                ...(nombres && {
+                                    where: {
+                                        nombre: {
+                                            [Op.in]: nombres
+                                        }
+                                    }
+                                })
+                            }
+                        ]
+                    }
+                ]
+            });
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
     }
 
+    // Datos actuales con sumatoria de cosechas
     async obtenerDatosActualesService(nombres: string): Promise<Suerte[]> {
         try {
-            if (!nombres) {
-                return await this.suerteRepository.findAll({
-                    where: {
-                        renovada: 'SI'
-                    },
-                    order: [this.suerteRepository.sequelize.literal('nombre + 0, nombre')],
-                    attributes: [
-                        'id_suerte',
-                        'nombre',
-                        'variedad',
-                        'zona',
-                        [
-                            this.suerteRepository.sequelize.literal(
-                                '(SELECT MAX(fecha_corte) from cortes where suerte_id = Suerte.id_suerte)'
-                            ),
-                            'createdAt'
-                        ],
-                        [
-                            this.suerteRepository.sequelize.literal(
-                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte) LIMIT 1)'
-                            ),
-                            'area'
-                        ],
-                        [
-                            this.suerteRepository.sequelize.literal(
-                                '(SELECT COALESCE(SUM(tablones.area), 0) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
-                            ),
-                            'renovada'
-                        ]
-                    ],
-                    include: [
-                        {
-                            model: Corte,
-                            required: true,
-                            where: {
-                                activo: true
-                            },
-                            attributes: ['id_corte', 'numero', 'fecha_inicio'],
-                            include: [
-                                {
-                                    model: Tablon,
-                                    required: false
-                                }
-                            ]
-                        }
-                    ]
-                });
-            } else {
-                return await this.suerteRepository.findAll({
-                    where: {
-                        renovada: 'SI',
-                        nombre: {
-                            [Op.in]: nombres.split(',')
-                        }
-                    },
-                    order: [this.suerteRepository.sequelize.literal('nombre + 0, nombre')],
-                    attributes: [
-                        'id_suerte',
-                        'nombre',
-                        'variedad',
-                        'zona',
-                        [
-                            this.suerteRepository.sequelize.literal(
-                                '(SELECT MAX(fecha_corte) from cortes where suerte_id = Suerte.id_suerte)'
-                            ),
-                            'createdAt'
-                        ],
-                        [
-                            this.suerteRepository.sequelize.literal(
-                                '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
-                            ),
-                            'area'
-                        ],
-                        [
-                            this.suerteRepository.sequelize.literal(
-                                '(SELECT COALESCE(SUM(tablones.area), 0) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
-                            ),
-                            'renovada'
-                        ]
-                    ],
-                    include: [
-                        {
-                            model: Corte,
-                            required: true,
-                            where: {
-                                activo: true
-                            },
-                            attributes: ['id_corte', 'numero', 'fecha_inicio'],
-                            include: [
-                                {
-                                    model: Tablon,
-                                    required: false
-                                }
-                            ]
-                        }
-                    ]
-                });
+            const whereCondition: any = {
+                renovada: 'SI'
+            };
+
+            if (nombres) {
+                whereCondition.nombre = {
+                    [Op.in]: nombres.split(',').map((n) => n.trim())
+                };
             }
+
+            return await this.suerteRepository.findAll({
+                where: whereCondition,
+                order: [this.suerteRepository.sequelize.literal('nombre + 0, nombre')],
+                attributes: [
+                    'id_suerte',
+                    'nombre',
+                    'variedad',
+                    'zona',
+                    [
+                        this.suerteRepository.sequelize.literal(
+                            `(SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte)`
+                        ),
+                        'createdAt'
+                    ],
+                    [
+                        this.suerteRepository.sequelize.literal(
+                            `(SELECT COALESCE(SUM(co.peso),0) FROM cosechas co INNER JOIN cortes c ON co.corte_id = c.id_corte WHERE c.suerte_id = Suerte.id_suerte AND c.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))`
+                        ),
+                        'area'
+                    ],
+                    [
+                        this.suerteRepository.sequelize.literal(
+                            `(SELECT COALESCE(SUM(t.area),0) FROM tablones t INNER JOIN cortes c ON t.corte_id = c.id_corte WHERE c.suerte_id = Suerte.id_suerte AND c.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))`
+                        ),
+                        'renovada'
+                    ]
+                ],
+
+                include: [
+                    {
+                        model: Corte,
+                        as: 'listcortes',
+                        required: true,
+                        where: {
+                            activo: true
+                        },
+                        attributes: ['id_corte', 'numero', 'fecha_inicio'],
+                        include: [
+                            {
+                                model: Tablon,
+                                as: 'listTablones',
+                                required: false
+                            }
+                        ]
+                    }
+                ]
+            });
         } catch (error) {
             throw new InternalServerErrorException(error);
         }
     }
+
+    // Datos actuales con filas individuales por cada cosecha
+    // async obtenerDatosActualesService(nombres: string): Promise<Cosecha[]> {
+    //     try {
+    //         const whereSuerte: any = {
+    //             renovada: 'SI'
+    //         };
+
+    //         if (nombres) {
+    //             whereSuerte.nombre = {
+    //                 [Op.in]: nombres.split(',').map((n) => n.trim())
+    //             };
+    //         }
+
+    //         return await this.cosechaRepository.findAll({
+    //             attributes: ['id_cosecha', 'peso', 'rendimiento', 'numeroVagones', 'numeroMulas'],
+    //             include: [
+    //                 {
+    //                     model: Corte,
+    //                     as: 'cortePadre',
+    //                     required: true,
+    //                     where: {
+    //                         activo: true
+    //                     },
+    //                     include: [
+    //                         {
+    //                             model: Suerte,
+    //                             as: 'suertePadre',
+    //                             required: true,
+    //                             where: whereSuerte
+    //                         },
+    //                         {
+    //                             model: Tablon,
+    //                             as: 'listTablones',
+    //                             required: false
+    //                         }
+    //                     ]
+    //                 }
+    //             ],
+    //             order: [[{ model: Corte, as: 'cortePadre' }, { model: Suerte, as: 'suertePadre' }, 'nombre', 'ASC']]
+    //         });
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error);
+    //     }
+    // }
+
+    // Consultas anteriores para una sola cosecha por corte
+    // async consultarProntuarioService(prontuarioInput: ProntuarioInput): Promise<Cosecha[]> {
+    //     try {
+    //         if (prontuarioInput.nombre.trim() !== '') {
+    //             return await this.suerteRepository
+    //                 .count({
+    //                     where: {
+    //                         nombre: {
+    //                             [Op.in]: prontuarioInput.nombre.split(',')
+    //                         }
+    //                     }
+    //                 })
+    //                 .then(async (count) => {
+    //                     if (count != 0) {
+    //                         return await this.suerteRepository.sequelize
+    //                             .query(
+    //                                 'select count(*) as conteo from `cosechas` c INNER JOIN `cortes` o ON o.id_corte=c.corte_id INNER JOIN `suertes` s ON s.id_suerte=o.suerte_id where s.nombre IN(:nombr) and o.fecha_corte BETWEEN :inicia AND :fina',
+    //                                 {
+    //                                     replacements: {
+    //                                         nombr: prontuarioInput.nombre.split(','),
+    //                                         inicia: prontuarioInput.fecha_inicio,
+    //                                         fina: prontuarioInput.fecha_fin
+    //                                     },
+    //                                     type: QueryTypes.SELECT
+    //                                 }
+    //                             )
+    //                             .then(async (cuente: any) => {
+    //                                 if (cuente[0].conteo != 0) {
+    //                                     return await this.cosechaRepository.findAll({
+    //                                         order: [
+    //                                             [
+    //                                                 { model: Corte, as: 'cortePadre' },
+    //                                                 { model: Suerte, as: 'suertePadre' },
+    //                                                 this.suerteRepository.sequelize.literal('nombre + 0, nombre')
+    //                                             ]
+    //                                         ],
+    //                                         include: [
+    //                                             {
+    //                                                 model: Corte,
+    //                                                 required: true,
+    //                                                 // raw: true,
+    //                                                 attributes: {
+    //                                                     include: [
+    //                                                         [
+    //                                                             this.suerteRepository.sequelize.literal(
+    //                                                                 `(SELECT SUM(area) FROM tablones WHERE corte_id=id_corte)`
+    //                                                             ),
+    //                                                             'area'
+    //                                                         ]
+    //                                                     ]
+    //                                                 },
+    //                                                 where: {
+    //                                                     fecha_corte: {
+    //                                                         [Op.between]: [
+    //                                                             prontuarioInput.fecha_inicio,
+    //                                                             prontuarioInput.fecha_fin
+    //                                                         ]
+    //                                                     }
+    //                                                 },
+    //                                                 include: [
+    //                                                     {
+    //                                                         model: Suerte,
+    //                                                         required: true,
+    //                                                         where: {
+    //                                                             nombre: {
+    //                                                                 [Op.in]: prontuarioInput.nombre.split(',')
+    //                                                             }
+    //                                                         }
+    //                                                     }
+    //                                                 ]
+    //                                             }
+    //                                         ]
+    //                                     });
+    //                                 }
+    //                             });
+    //                     }
+    //                 });
+    //         } else {
+    //             return await this.cosechaRepository.findAll({
+    //                 order: [
+    //                     [
+    //                         { model: Corte, as: 'cortePadre' },
+    //                         { model: Suerte, as: 'suertePadre' },
+    //                         this.suerteRepository.sequelize.literal('nombre + 0, nombre')
+    //                     ]
+    //                 ],
+    //                 include: [
+    //                     {
+    //                         model: Corte,
+    //                         required: true,
+    //                         //   raw: true,
+    //                         attributes: {
+    //                             include: [
+    //                                 [
+    //                                     this.suerteRepository.sequelize.literal(
+    //                                         `(SELECT SUM(area) FROM tablones WHERE corte_id=id_corte)`
+    //                                     ),
+    //                                     'area'
+    //                                 ]
+    //                             ]
+    //                         },
+    //                         where: {
+    //                             fecha_corte: {
+    //                                 [Op.between]: [prontuarioInput.fecha_inicio, prontuarioInput.fecha_fin]
+    //                             }
+    //                         },
+    //                         include: [
+    //                             {
+    //                                 model: Suerte,
+    //                                 required: true
+    //                             }
+    //                         ]
+    //                     }
+    //                 ]
+    //             });
+    //         }
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error);
+    //     }
+    // }
+
+    // async obtenerDatosActualesService(nombres: string): Promise<Suerte[]> {
+    //     try {
+    //         if (!nombres) {
+    //             return await this.suerteRepository.findAll({
+    //                 where: {
+    //                     renovada: 'SI'
+    //                 },
+    //                 order: [this.suerteRepository.sequelize.literal('nombre + 0, nombre')],
+    //                 attributes: [
+    //                     'id_suerte',
+    //                     'nombre',
+    //                     'variedad',
+    //                     'zona',
+    //                     [
+    //                         this.suerteRepository.sequelize.literal(
+    //                             '(SELECT MAX(fecha_corte) from cortes where suerte_id = Suerte.id_suerte)'
+    //                         ),
+    //                         'createdAt'
+    //                     ],
+    //                     [
+    //                         this.suerteRepository.sequelize.literal(
+    //                             '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte) LIMIT 1)'
+    //                         ),
+    //                         'area'
+    //                     ],
+    //                     [
+    //                         this.suerteRepository.sequelize.literal(
+    //                             '(SELECT COALESCE(SUM(tablones.area), 0) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
+    //                         ),
+    //                         'renovada'
+    //                     ]
+    //                 ],
+    //                 include: [
+    //                     {
+    //                         model: Corte,
+    //                         required: true,
+    //                         where: {
+    //                             activo: true
+    //                         },
+    //                         attributes: ['id_corte', 'numero', 'fecha_inicio'],
+    //                         include: [
+    //                             {
+    //                                 model: Tablon,
+    //                                 required: false
+    //                             }
+    //                         ]
+    //                     }
+    //                 ]
+    //             });
+    //         } else {
+    //             return await this.suerteRepository.findAll({
+    //                 where: {
+    //                     renovada: 'SI',
+    //                     nombre: {
+    //                         [Op.in]: nombres.split(',')
+    //                     }
+    //                 },
+    //                 order: [this.suerteRepository.sequelize.literal('nombre + 0, nombre')],
+    //                 attributes: [
+    //                     'id_suerte',
+    //                     'nombre',
+    //                     'variedad',
+    //                     'zona',
+    //                     [
+    //                         this.suerteRepository.sequelize.literal(
+    //                             '(SELECT MAX(fecha_corte) from cortes where suerte_id = Suerte.id_suerte)'
+    //                         ),
+    //                         'createdAt'
+    //                     ],
+    //                     [
+    //                         this.suerteRepository.sequelize.literal(
+    //                             '(SELECT peso FROM cosechas INNER JOIN cortes ON cosechas.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
+    //                         ),
+    //                         'area'
+    //                     ],
+    //                     [
+    //                         this.suerteRepository.sequelize.literal(
+    //                             '(SELECT COALESCE(SUM(tablones.area), 0) FROM tablones INNER JOIN cortes ON tablones.corte_id = cortes.id_corte WHERE cortes.suerte_id = Suerte.id_suerte AND cortes.fecha_corte = (SELECT MAX(fecha_corte) FROM cortes WHERE suerte_id = Suerte.id_suerte))'
+    //                         ),
+    //                         'renovada'
+    //                     ]
+    //                 ],
+    //                 include: [
+    //                     {
+    //                         model: Corte,
+    //                         required: true,
+    //                         where: {
+    //                             activo: true
+    //                         },
+    //                         attributes: ['id_corte', 'numero', 'fecha_inicio'],
+    //                         include: [
+    //                             {
+    //                                 model: Tablon,
+    //                                 required: false
+    //                             }
+    //                         ]
+    //                     }
+    //                 ]
+    //             });
+    //         }
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error);
+    //     }
+    // }
 }

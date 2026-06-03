@@ -1,6 +1,9 @@
 # compiled output
 /dist
 /node_modules
+/src/config
+/src/migrations
+.sequelizerc
 
 # Logs
 logs

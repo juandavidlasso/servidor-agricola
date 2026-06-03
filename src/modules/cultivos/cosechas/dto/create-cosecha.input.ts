@@ -28,6 +28,11 @@ export class CreateCosechaInput {
     @IsString()
     nota?: string;
 
+    @Field(() => String, { nullable: true })
+    @IsOptional()
+    @IsString()
+    numeroSuerte?: string;
+
     @Field(() => Int, { nullable: false })
     @IsNotEmpty()
     @IsNumber()

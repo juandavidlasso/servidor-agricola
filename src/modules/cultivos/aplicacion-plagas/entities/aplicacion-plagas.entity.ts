@@ -35,7 +35,7 @@ export class AplicacionPlagas extends Model<AplicacionPlagas> {
     @Column({ allowNull: false, type: DataType.INTEGER })
     trapl_id: number;
 
-    @BelongsTo(() => Tablon)
+    @BelongsTo(() => Tablon, { foreignKey: 'tablon_id' })
     @Field(() => Tablon)
     tablon: Tablon;
 

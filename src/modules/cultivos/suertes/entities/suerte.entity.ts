@@ -43,6 +43,10 @@ export class Suerte extends Model<Suerte> {
     declare updatedAt?: string;
 
     @Field(() => [Corte])
-    @HasMany(() => Corte)
+    @HasMany(() => Corte, {
+        foreignKey: 'suerte_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
+    })
     listcortes: Corte[];
 }

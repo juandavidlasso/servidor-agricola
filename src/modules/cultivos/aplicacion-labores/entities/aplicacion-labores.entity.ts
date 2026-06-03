@@ -30,6 +30,6 @@ export class AplicacionLabores extends Model<AplicacionLabores> {
     labor: Labores;
 
     @Field(() => Corte)
-    @BelongsTo(() => Corte)
+    @BelongsTo(() => Corte, { foreignKey: 'corte_id' })
     corte: Corte;
 }

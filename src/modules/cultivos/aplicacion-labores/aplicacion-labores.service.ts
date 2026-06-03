@@ -61,7 +61,8 @@ export class AplicacionLaboresService {
                         ]
                     }
                 ],
-                where: { corte_id: id }
+                where: { corte_id: id },
+                order: [[{ model: Labores, as: 'labor' }, 'fecha', 'DESC']]
             });
         } catch (error) {
             throw new InternalServerErrorException(error);

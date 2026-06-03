@@ -23,7 +23,7 @@ export class CosechasService {
         }
     }
 
-    async obtenerCosechaCorteService(id_corte: number): Promise<Cosecha | null> {
+    async obtenerCosechaCorteService(id_corte: number): Promise<Cosecha[] | null> {
         try {
             const cosecha = await this.cosechaRepository.findOne({ where: { corte_id: id_corte } });
 
@@ -33,7 +33,7 @@ export class CosechasService {
 
             if (tablones === 0) return null;
 
-            return await this.cosechaRepository.findOne({
+            return await this.cosechaRepository.findAll({
                 where: { corte_id: id_corte },
                 include: [
                     {

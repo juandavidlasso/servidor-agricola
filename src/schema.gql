@@ -132,6 +132,7 @@ type Cosecha {
   numeroVagones: Int
   numeroMulas: Float
   nota: String
+  numeroSuerte: String
   corte_id: Int!
   cortePadre: Corte!
 }
@@ -264,7 +265,7 @@ type Query {
   obtenerTablonesPorCorte(id_corte: Int!): [Tablon!]!
   countTablonesPorSuerte(id_suerte: Int!): Float!
   obtenerTablonesYAplicacionesPlagas(id_corte: Int!): [Tablon!]!
-  obtenerTotalHectareasSuertes: Tablon!
+  obtenerTotalHectareasSuertes: Tablon
   obtenerLabores: [Labores!]!
   obtenerAplicacionesHerbicidas: [AplicacionHerbicida!]!
   obtenerAplicacionesLabores(corte_id: Int!): [AplicacionLabores!]!
@@ -278,7 +279,7 @@ type Query {
   obtenerTratamientoPlagas: [TratamientoPlagas!]!
   obtenerRiegosCorte(corte_id: Int!): [Riego!]!
   obtenerRiegosMayor(corte_id: Int!): Float!
-  obtenerCosechaCorte(id_corte: Int!): Cosecha
+  obtenerCosechaCorte(id_corte: Int!): [Cosecha!]
   obtenerResumenLluviasYear(year: Int!): [AplicacionLluvia!]!
   obtenerMaquinarias: [Maquinaria!]!
   obtenerInsumos: [Insumo!]!
@@ -622,6 +623,7 @@ input CreateCosechaInput {
   numeroVagones: Int
   numeroMulas: Float
   nota: String
+  numeroSuerte: String
   corte_id: Int!
 }
 
@@ -631,6 +633,7 @@ input UpdateCosechaInput {
   numeroVagones: Int
   numeroMulas: Float
   nota: String
+  numeroSuerte: String
   corte_id: Int
   id_cosecha: Int!
 }

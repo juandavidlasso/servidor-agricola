@@ -34,6 +34,6 @@ export class AplicacionesHerbicida extends Model<AplicacionesHerbicida> {
     aplicacionHerbicida: AplicacionHerbicida;
 
     @Field(() => Corte)
-    @BelongsTo(() => Corte)
+    @BelongsTo(() => Corte, { foreignKey: 'corte_id' })
     corte: Corte;
 }

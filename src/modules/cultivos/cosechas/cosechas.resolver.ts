@@ -13,8 +13,8 @@ export class CosechasResolver {
         return this.cosechasService.agregarCosechaService(createCosechaInput);
     }
 
-    @Query(() => Cosecha, { name: 'obtenerCosechaCorte', nullable: true })
-    async obtenerCosechaCorte(@Args('id_corte', { type: () => Int }) id_corte: number): Promise<Cosecha | null> {
+    @Query(() => [Cosecha], { name: 'obtenerCosechaCorte', nullable: true })
+    async obtenerCosechaCorte(@Args('id_corte', { type: () => Int }) id_corte: number): Promise<Cosecha[] | null> {
         return this.cosechasService.obtenerCosechaCorteService(id_corte);
     }
 
