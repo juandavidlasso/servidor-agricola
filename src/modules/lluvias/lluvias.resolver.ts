@@ -3,6 +3,7 @@ import { LluviasService } from './lluvias.service';
 import { Lluvia } from './entities/lluvia.entity';
 import { CreateLluviaInput } from './dto/create-lluvia.input';
 import { UpdateLluviaInput } from './dto/update-lluvia.input';
+import { FilterLluviasYearInput } from '@modules/pluviometros/dto/create-pluviometro.input';
 
 @Resolver(() => Lluvia)
 export class LluviasResolver {
@@ -31,7 +32,9 @@ export class LluviasResolver {
     }
 
     @Query(() => [Lluvia], { name: 'obtenerPromedioLluvias' })
-    async obtenerPromedioLluvias(@Args('year', { type: () => Int }) year: number): Promise<Lluvia[]> {
-        return this.lluviasService.obtenerPromedioLluviasService(year);
+    async obtenerPromedioLluvias(
+        @Args('filterLluviasYearInput') filterLluviasYearInput: FilterLluviasYearInput
+    ): Promise<Lluvia[]> {
+        return this.lluviasService.obtenerPromedioLluviasService(filterLluviasYearInput);
     }
 }

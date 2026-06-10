@@ -2,6 +2,7 @@ import { Resolver, Mutation, Args, Int, Query } from '@nestjs/graphql';
 import { AplicacionLluviasService } from './aplicacion_lluvias.service';
 import { AplicacionLluvia } from './entities/aplicacion_lluvia.entity';
 import { CreateAplicacionLluviaInput } from './dto/create-aplicacion_lluvia.input';
+import { FilterLluviasYearInput } from '@modules/pluviometros/dto/create-pluviometro.input';
 
 @Resolver(() => AplicacionLluvia)
 export class AplicacionLluviasResolver {
@@ -23,7 +24,9 @@ export class AplicacionLluviasResolver {
     }
 
     @Query(() => [AplicacionLluvia], { name: 'obtenerResumenLluviasYear' })
-    async obtenerResumenLluviasYear(@Args('year', { type: () => Int }) year: number): Promise<AplicacionLluvia[]> {
-        return this.aplicacionLluviasService.obtenerResumenLluviasYearService(year);
+    async obtenerResumenLluviasYear(
+        @Args('filterLluviasYearInput') filterLluviasYearInput: FilterLluviasYearInput
+    ): Promise<AplicacionLluvia[]> {
+        return this.aplicacionLluviasService.obtenerResumenLluviasYearService(filterLluviasYearInput);
     }
 }

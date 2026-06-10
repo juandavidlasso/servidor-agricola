@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { QueryTypes } from 'sequelize';
 import { CreateAplicacionLluviaInput } from './dto/create-aplicacion_lluvia.input';
 import { AplicacionLluvia } from './entities/aplicacion_lluvia.entity';
+import { FilterLluviasYearInput } from '@modules/pluviometros/dto/create-pluviometro.input';
 
 @Injectable()
 export class AplicacionLluviasService {
@@ -31,13 +32,32 @@ export class AplicacionLluviasService {
         }
     }
 
-    async obtenerResumenLluviasYearService(year: number): Promise<AplicacionLluvia[]> {
+    async obtenerResumenLluviasYearService(filterLluviasYearInput: FilterLluviasYearInput): Promise<AplicacionLluvia[]> {
         try {
+            const { year, months } = filterLluviasYearInput;
+
+            const monthFilter = months.length > 0 ? ` AND MONTH(fecha) IN (:months)` : '';
+
             return await this.aplicacionLluviaRepository.sequelize.query(
-                `SELECT pluviometro_id, MONTH(fecha) AS fecha, SUM(cantidad) AS cantidad FROM aplicacion_lluvias INNER JOIN lluvias ON aplicacion_lluvias.lluvia_id = lluvias.id_lluvia WHERE YEAR(fecha) = :fecano GROUP BY pluviometro_id, YEAR(fecha), MONTH(fecha)`,
+                `
+            SELECT
+                pluviometro_id,
+                MONTH(fecha) AS fecha,
+                SUM(cantidad) AS cantidad
+            FROM aplicacion_lluvias
+            INNER JOIN lluvias
+                ON aplicacion_lluvias.lluvia_id = lluvias.id_lluvia
+            WHERE YEAR(fecha) = :fecano
+            ${monthFilter}
+            GROUP BY
+                pluviometro_id,
+                YEAR(fecha),
+                MONTH(fecha)
+            `,
                 {
                     replacements: {
-                        fecano: year
+                        fecano: year,
+                        months
                     },
                     type: QueryTypes.SELECT
                 }
@@ -46,4 +66,20 @@ export class AplicacionLluviasService {
             throw new InternalServerErrorException(error);
         }
     }
+
+    // async obtenerResumenLluviasYearService(year: number): Promise<AplicacionLluvia[]> {
+    //     try {
+    //         return await this.aplicacionLluviaRepository.sequelize.query(
+    //             `SELECT pluviometro_id, MONTH(fecha) AS fecha, SUM(cantidad) AS cantidad FROM aplicacion_lluvias INNER JOIN lluvias ON aplicacion_lluvias.lluvia_id = lluvias.id_lluvia WHERE YEAR(fecha) = :fecano GROUP BY pluviometro_id, YEAR(fecha), MONTH(fecha)`,
+    //             {
+    //                 replacements: {
+    //                     fecano: year
+    //                 },
+    //                 type: QueryTypes.SELECT
+    //             }
+    //         );
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error);
+    //     }
+    // }
 }

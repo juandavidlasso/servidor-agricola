@@ -5,6 +5,7 @@ import { CreateLluviaInput } from './dto/create-lluvia.input';
 import { UpdateLluviaInput } from './dto/update-lluvia.input';
 import { Lluvia } from './entities/lluvia.entity';
 import { AplicacionLluvia } from '../cultivos/aplicacion_lluvias/entities/aplicacion_lluvia.entity';
+import { FilterLluviasYearInput } from '@modules/pluviometros/dto/create-pluviometro.input';
 
 @Injectable()
 export class LluviasService {
@@ -73,13 +74,32 @@ export class LluviasService {
         }
     }
 
-    async obtenerPromedioLluviasService(year: number): Promise<Lluvia[]> {
+    async obtenerPromedioLluviasService(filterLluviasYearInput: FilterLluviasYearInput): Promise<Lluvia[]> {
         try {
+            const { year, months } = filterLluviasYearInput;
+
+            const monthFilter = months.length > 0 ? ' AND MONTH(lluvias.fecha) IN (:months)' : '';
+
             return await this.lluviaRepository.sequelize.query(
-                `SELECT MONTH(lluvias.fecha) AS fecha, SUM(lluvias.cantidad) AS cantidad FROM lluvias JOIN aplicacion_lluvias ON lluvias.id_lluvia = aplicacion_lluvias.lluvia_id JOIN pluviometros ON aplicacion_lluvias.pluviometro_id = pluviometros.id_pluviometro WHERE date_format(lluvias.fecha, '%Y') = :fecano AND pluviometros.nombre != 8 GROUP BY MONTH(lluvias.fecha)`,
+                `
+            SELECT
+                MONTH(lluvias.fecha) AS fecha,
+                SUM(lluvias.cantidad) AS cantidad
+            FROM lluvias
+            JOIN aplicacion_lluvias
+                ON lluvias.id_lluvia = aplicacion_lluvias.lluvia_id
+            JOIN pluviometros
+                ON aplicacion_lluvias.pluviometro_id = pluviometros.id_pluviometro
+            WHERE YEAR(lluvias.fecha) = :fecano
+            AND pluviometros.nombre != 8
+            ${monthFilter}
+            GROUP BY MONTH(lluvias.fecha)
+            ORDER BY MONTH(lluvias.fecha)
+            `,
                 {
                     replacements: {
-                        fecano: year
+                        fecano: year,
+                        months
                     },
                     type: QueryTypes.SELECT
                 }
@@ -88,4 +108,19 @@ export class LluviasService {
             throw new InternalServerErrorException(error);
         }
     }
+    // async obtenerPromedioLluviasService(year: number): Promise<Lluvia[]> {
+    //     try {
+    //         return await this.lluviaRepository.sequelize.query(
+    //             `SELECT MONTH(lluvias.fecha) AS fecha, SUM(lluvias.cantidad) AS cantidad FROM lluvias JOIN aplicacion_lluvias ON lluvias.id_lluvia = aplicacion_lluvias.lluvia_id JOIN pluviometros ON aplicacion_lluvias.pluviometro_id = pluviometros.id_pluviometro WHERE date_format(lluvias.fecha, '%Y') = :fecano AND pluviometros.nombre != 8 GROUP BY MONTH(lluvias.fecha)`,
+    //             {
+    //                 replacements: {
+    //                     fecano: year
+    //                 },
+    //                 type: QueryTypes.SELECT
+    //             }
+    //         );
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error);
+    //     }
+    // }
 }

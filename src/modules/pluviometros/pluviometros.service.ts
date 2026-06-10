@@ -1,7 +1,7 @@
 import { InjectModel } from '@nestjs/sequelize';
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { Op } from 'sequelize';
-import { CreatePluviometroInput, FilterLluviasInput } from './dto/create-pluviometro.input';
+import { CreatePluviometroInput, FilterLluviasInput, FilterLluviasYearInput } from './dto/create-pluviometro.input';
 import { Pluviometro } from './entities/pluviometro.entity';
 import { AplicacionLluvia } from '../cultivos/aplicacion_lluvias/entities/aplicacion_lluvia.entity';
 import { Lluvia } from '../lluvias/entities/lluvia.entity';
@@ -76,8 +76,36 @@ export class PluviometrosService {
         }
     }
 
-    async obtenerLluviasYearService(year: number): Promise<Pluviometro[]> {
+    async obtenerLluviasYearService(filterLluviasYearInput: FilterLluviasYearInput): Promise<Pluviometro[]> {
         try {
+            const { year, months } = filterLluviasYearInput;
+
+            const condicionesFecha = [
+                this.pluviometroRepository.sequelize.where(
+                    this.pluviometroRepository.sequelize.fn(
+                        'YEAR',
+                        this.pluviometroRepository.sequelize.col('listAplicacionesLluvias.lluviaPadre.fecha')
+                    ),
+                    year
+                )
+            ];
+
+            const monthFilter = months.length > 0 ? ` AND MONTH(fecha) IN (${months.join(',')})` : '';
+
+            if (months.length > 0) {
+                condicionesFecha.push(
+                    this.pluviometroRepository.sequelize.where(
+                        this.pluviometroRepository.sequelize.fn(
+                            'MONTH',
+                            this.pluviometroRepository.sequelize.col('listAplicacionesLluvias.lluviaPadre.fecha')
+                        ),
+                        {
+                            [Op.in]: months
+                        }
+                    )
+                );
+            }
+
             return await this.pluviometroRepository.findAll({
                 order: [['nombre', 'ASC']],
                 attributes: [
@@ -85,9 +113,18 @@ export class PluviometrosService {
                     'nombre',
                     'suertesAsociadas',
                     [
-                        this.pluviometroRepository.sequelize.literal(
-                            `(SELECT SUM(cantidad) FROM aplicacion_lluvias INNER JOIN lluvias ON lluvia_id = id_lluvia WHERE pluviometro_id = id_pluviometro AND YEAR(fecha) = ${year} GROUP BY pluviometro_id)`
-                        ),
+                        this.pluviometroRepository.sequelize.literal(`
+                        (
+                            SELECT SUM(cantidad)
+                            FROM aplicacion_lluvias
+                            INNER JOIN lluvias
+                                ON lluvia_id = id_lluvia
+                            WHERE pluviometro_id = id_pluviometro
+                            AND YEAR(fecha) = ${year}
+                            ${monthFilter}
+                            GROUP BY pluviometro_id
+                        )
+                    `),
                         'totalMes'
                     ]
                 ],
@@ -101,18 +138,7 @@ export class PluviometrosService {
                                 required: true,
                                 where: {
                                     fecha: {
-                                        [Op.and]: [
-                                            this.pluviometroRepository.sequelize.where(
-                                                this.pluviometroRepository.sequelize.fn(
-                                                    'YEAR',
-                                                    this.pluviometroRepository.sequelize.col(
-                                                        'listAplicacionesLluvias.lluviaPadre.fecha'
-                                                    )
-                                                ),
-                                                '=',
-                                                year
-                                            )
-                                        ]
+                                        [Op.and]: condicionesFecha
                                     }
                                 }
                             }
@@ -124,4 +150,53 @@ export class PluviometrosService {
             throw new InternalServerErrorException(error);
         }
     }
+
+    // async obtenerLluviasYearService(filterLluviasYearInput: FilterLluviasYearInput): Promise<Pluviometro[]> {
+    //     try {
+    //         return await this.pluviometroRepository.findAll({
+    //             order: [['nombre', 'ASC']],
+    //             attributes: [
+    //                 'id_pluviometro',
+    //                 'nombre',
+    //                 'suertesAsociadas',
+    //                 [
+    //                     this.pluviometroRepository.sequelize.literal(
+    //                         `(SELECT SUM(cantidad) FROM aplicacion_lluvias INNER JOIN lluvias ON lluvia_id = id_lluvia WHERE pluviometro_id = id_pluviometro AND YEAR(fecha) = ${year} GROUP BY pluviometro_id)`
+    //                     ),
+    //                     'totalMes'
+    //                 ]
+    //             ],
+    //             include: [
+    //                 {
+    //                     model: AplicacionLluvia,
+    //                     required: false,
+    //                     include: [
+    //                         {
+    //                             model: Lluvia,
+    //                             required: true,
+    //                             where: {
+    //                                 fecha: {
+    //                                     [Op.and]: [
+    //                                         this.pluviometroRepository.sequelize.where(
+    //                                             this.pluviometroRepository.sequelize.fn(
+    //                                                 'YEAR',
+    //                                                 this.pluviometroRepository.sequelize.col(
+    //                                                     'listAplicacionesLluvias.lluviaPadre.fecha'
+    //                                                 )
+    //                                             ),
+    //                                             '=',
+    //                                             year
+    //                                         )
+    //                                     ]
+    //                                 }
+    //                             }
+    //                         }
+    //                     ]
+    //                 }
+    //             ]
+    //         });
+    //     } catch (error) {
+    //         throw new InternalServerErrorException(error);
+    //     }
+    // }
 }

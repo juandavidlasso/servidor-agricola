@@ -1,7 +1,7 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
 import { PluviometrosService } from './pluviometros.service';
 import { Pluviometro } from './entities/pluviometro.entity';
-import { CreatePluviometroInput, FilterLluviasInput } from './dto/create-pluviometro.input';
+import { CreatePluviometroInput, FilterLluviasInput, FilterLluviasYearInput } from './dto/create-pluviometro.input';
 
 @Resolver(() => Pluviometro)
 export class PluviometrosResolver {
@@ -22,7 +22,9 @@ export class PluviometrosResolver {
     }
 
     @Query(() => [Pluviometro], { name: 'obtenerLluviasYear' })
-    async obtenerLluviasYear(@Args('year') year: number): Promise<Pluviometro[]> {
-        return this.pluviometrosService.obtenerLluviasYearService(year);
+    async obtenerLluviasYear(
+        @Args('filterLluviasYearInput') filterLluviasYearInput: FilterLluviasYearInput
+    ): Promise<Pluviometro[]> {
+        return this.pluviometrosService.obtenerLluviasYearService(filterLluviasYearInput);
     }
 }

@@ -1,5 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 @InputType()
 export class CreatePluviometroInput {
@@ -25,4 +25,15 @@ export class FilterLluviasInput {
     @IsNumber()
     @IsOptional()
     year?: number;
+}
+
+@InputType()
+export class FilterLluviasYearInput {
+    @Field(() => [Int], { nullable: false })
+    @IsArray()
+    months?: [number];
+
+    @Field(() => Int, { nullable: false })
+    @IsNumber()
+    year: number;
 }
